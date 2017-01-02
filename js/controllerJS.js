@@ -10,6 +10,7 @@ service_url['getData'] = service_host+'getData.php';
 service_url['getViewData'] = service_host+'getViewData.php';
 service_url['getReceiptList'] = service_host+'getReceiptList.php';
 service_url['getPaymentList'] = service_host+'getPaymentList.php';
+service_url['viewJournal'] = service_host+'viewJournal.php';
 
 function loginController() {
 
@@ -158,7 +159,15 @@ function getData(){
 
     }else{
 		// all 
-		
+        getJson(dataIn,service_url['viewJournal'],function (data) {
+            if (data.readyState == 4) {
+
+
+                var dataInfo = JSON.parse(data.response);
+              var str= dataInfo.toString();
+                console.log(str);
+            }
+        });
 	}
 
 }
