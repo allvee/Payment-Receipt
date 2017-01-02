@@ -8,6 +8,8 @@ service_url['receiptForm'] = service_host+'receiptForm.php';
 service_url['paymentForm'] = service_host+'paymentForm.php';
 service_url['getData'] = service_host+'getData.php';
 service_url['getViewData'] = service_host+'getViewData.php';
+service_url['getReceiptList'] = service_host+'getReceiptList.php';
+service_url['getPaymentList'] = service_host+'getPaymentList.php';
 
 function loginController() {
 
@@ -48,11 +50,20 @@ function saveReceipt(){
         warningmsg('Please Enter Amount of Money in BDT.');
         return;
     }
+
+    if($("#receiptID").val()=="NA" && $("#receiptAction").val()=='UPDATE'){
+        $("#receiptID").val($("#receiptNameselect").val());
+    }
    var response = postFormData('receiptForm', service_url['receiptForm'], function (data) {
         if (data.readyState == 4) {
+            if(data.response == '+OK'){
+                Successmsg('Save Receipt Entry Successful.');
+            }else{
+                warningmsg('For New Year Month ');
+            }
 
         }
-       Successmsg('Save Receipt Entry Successful.');
+
     });
 }
 
@@ -70,10 +81,14 @@ function savePayment(){
         warningmsg('Please Enter Amount of Money in BDT.');
         return;
     }
+    if($("#paymentID").val()=="NA" && $("#paymentAction").val()=="UPDATE"){
+        $("#paymentID").val($("#paymentNameselect").val());
+    }
     postFormData('paymentForm', service_url['paymentForm'], function (data) {
         if (data.readyState == 4) {
+            Successmsg('Save Payment Entry Successful.');
         }
-        Successmsg('Save Payment Entry Successful.');
+
     });
 
 }
@@ -101,11 +116,11 @@ function getData(){
 
     if(type != null) {
         if(type == 'payment'){
-            $("#tableTitle").html('PAYMENT TABLE FOR MONTH '+monthName[month]+' '+year);
+            $("#tableTitle").html('PAYMENT TABLE FOR MONTH '+monthName[month-1]+' '+year);
         }else if(type == 'receipt'){
-            $("#tableTitle").html('RECEIPT TABLE FOR MONTH '+monthName[month]+' '+year);
+            $("#tableTitle").html('RECEIPT TABLE FOR MONTH '+monthName[month-1]+' '+year);
         }else{
-            $("#tableTitle").html('JOURNAL FOR MONTH '+monthName[month]+' '+year);
+            $("#tableTitle").html('JOURNAL FOR MONTH '+monthName[month-1]+' '+year);
         }
        var dataInfo = {
             'year': year,
@@ -271,8 +286,14 @@ function changeEntry(type,id,col){
     if(type == 1){
 
         view('container','paymentView',true);changeTab('payment');
+        $("#saveCancelPayment").hide();
+        $("#paymentName").show();
+        $("#paymentNameselect").hide();
+
         getJson(dataIn,service_url['getViewData'],function (data) {
             if (data.readyState == 4) {
+
+
                 var dataInfo = JSON.parse(data.response);
                 $("#paymentName").val(dataInfo[0][0]);
                 $("#paymentYear").val(dataInfo[0][3]);
@@ -288,6 +309,11 @@ function changeEntry(type,id,col){
     }else if(type == 2){
 
         view('container','receiptView',true); changeTab('receipt');
+
+        $("#saveCancelREcceipt").hide();
+        $("#receiptName").show();
+        $("#receiptNameselect").hide();
+
         getJson(dataIn,service_url['getViewData'],function (data) {
             if (data.readyState == 4) {
                 var dataInfo = JSON.parse(data.response);
@@ -304,5 +330,42 @@ function changeEntry(type,id,col){
 
 
     }
+
+}
+
+function addReceipt(){
+    $("#receiptID").val('NA');
+    $("#receiptAction").val('ADD');
+    $("#saveCancelREcceipt").hide();
+    $("#receiptName").show();
+    $("#receiptNameselect").hide();
+}
+
+function addPayment(){
+    $("#paymentID").val('NA');
+    $("#paymentAction").val('ADD');
+    $("#saveCancelPayment").hide();
+    $("#paymentName").show();
+    $("#paymentNameselect").hide();
+}
+
+function getReceiptList(){
+    getJson('',service_url['getReceiptList'],function (data) {
+        if (data.readyState == 4) {
+            var dataInfo = JSON.parse(data.response);
+            $("#receiptNameselect").html(dataInfo);
+        }
+    });
+
+}
+
+function getPaymentList(){
+
+    getJson('',service_url['getPaymentList'],function (data) {
+        if (data.readyState == 4) {
+            var dataInfo = JSON.parse(data.response);
+            $("#paymentNameselect").html(dataInfo);
+        }
+    });
 
 }

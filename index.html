@@ -28,8 +28,8 @@
                             </div>
                             <ul class="nav navbar-nav" style="align: right;">
                                 <li class="active btn" id="home" onclick="view('container','homeView',true);changeTab('home');"><a>Home</a></li>
-                                <li class="btn" id="receipt" onclick="view('container','receiptView',true); changeTab('receipt');"><a>Receipt</a></li>
-                                <li class="btn" id="payment" onclick="view('container','paymentView',true);changeTab('payment');"><a>payment</a></li>
+                                <li class="btn" id="receipt" onclick="view('container','receiptView',true); changeTab('receipt');getReceiptList();"><a>Receipt</a></li>
+                                <li class="btn" id="payment" onclick="view('container','paymentView',true);changeTab('payment');getPaymentList();"><a>payment</a></li>
 								<li  class="btn" onclick="logout();"><a>Logout</a></li>
                             </ul>
                         </div>
@@ -168,13 +168,15 @@
     </div>
     <form id="receiptForm" onsubmit="saveReceipt(); return false;" enctype="text/plain">
         <input id="receiptID" name="receiptID" type="hidden" value="NA">
-        <input id="receiptAction" name="receiptAction" type="hidden" value="ADD">
+        <input id="receiptAction" name="receiptAction" type="hidden" value="UPDATE">
         <div class="form-group">
             <div class="row">
 
-                <div class="col-lg-6">
+                <div class="col-lg-1"><button class="btn btn-warning" id="saveCancelREcceipt" onclick="addReceipt();">+</button></div>
+                <div class="col-lg-5">
                      <label for="receiptName">Name:</label>
-                    <input type="text" class="form-control" id="receiptName" name="receiptName">
+                    <input type="text" class="form-control" style="display: none" id="receiptName" name="receiptName" value="NA">
+                    <select type="text" class="form-control" id="receiptNameselect" name="receiptNameselect"></select>
                 </div>
 
                 <div class="col-lg-6">
@@ -227,13 +229,16 @@
     </div>
     <form id="paymentForm" onsubmit="savePayment(); return false;" enctype="text/plain">
         <input id="paymentID" name="paymentID" type="hidden" value="NA">
-        <input id="paymentAction" name="paymentAction" type="hidden" value="ADD">
+        <input id="paymentAction" name="paymentAction" type="hidden" value="UPDATE">
         <div class="form-group">
             <div class="row">
 
-                <div class="col-lg-6">
-                    <label for="paymentName">Name:</label>
-                    <input type="text" class="form-control" id="paymentName" name="paymentName">
+
+                <div class="col-lg-1"><button class="btn btn-warning" id="saveCancelPayment" onclick="addPayment();">+</button></div>
+                <div class="col-lg-5">
+                    <label for="receiptName">Name:</label>
+                    <input type="text" class="form-control" style="display: none" id="paymentName" name="paymentName" value="NA">
+                    <select type="text" class="form-control" id="paymentNameselect" name="paymentNameselect"></select>
                 </div>
 
                 <div class="col-lg-6">
