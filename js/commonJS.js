@@ -26,11 +26,11 @@ function getJson(data, service_url, callBack) {
     };
 }
 
-function  alertmsg(){
+function  alertmsg(msg){
     modal({
         type: 'alert',
         title: 'Alert',
-        text: "Simple Message!"
+        text: msg
     });
 }
 function  warningmsg(msg) {

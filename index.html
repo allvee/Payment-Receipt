@@ -28,8 +28,8 @@
                             </div>
                             <ul class="nav navbar-nav" style="align: right;">
                                 <li class="active btn" id="home" onclick="view('container','homeView',true);changeTab('home');"><a>Home</a></li>
-                                <li class="btn" id="receipt" onclick="view('container','receiptView',true); changeTab('receipt');getReceiptList();"><a>Receipt</a></li>
-                                <li class="btn" id="payment" onclick="view('container','paymentView',true);changeTab('payment');getPaymentList();"><a>payment</a></li>
+                                <li class="btn" id="receipt" onclick="view('container','receiptView',true); changeTab('receipt');"><a>Receipt</a></li>
+                                <li class="btn" id="payment" onclick="view('container','paymentView',true);changeTab('payment');"><a>payment</a></li>
 								<li  class="btn" onclick="logout();"><a>Logout</a></li>
                             </ul>
                         </div>
@@ -138,7 +138,7 @@
         </div>
         <div class="col-lg-1">
             <div class="radio">
-                <label style=" font-weight: bold"><input type="radio" name="dataViewView" id="allViewdt" checked="checked">ALL</label>
+                <label style=" font-weight: bold"><input type="radio" name="dataViewView" id="allViewdt" checked="checked">JOURNAL</label>
             </div>
         </div>
         <div class="col-lg-6"></div>
@@ -165,18 +165,48 @@
         <div class="col-lg-12" style=" font-weight: bold; text-align: center;"><h2>Troubleshoot Technologies</h2></div>
         <div class="col-lg-12" style=" font-weight: bold; text-align: center;"><h4>Committed to quality service</h4></div>
         <div class="col-lg-12" style="text-align: left;"><h4>Receipt Entry:</h4></div>
+        <br>
+        <br>
+        <div class="col-lg-2"><button class="btn btn-warning" id="saveCancelReceiptUser" onclick="saveCancelReceiptUser();">New Receipt Name</button></div>
+        <div class="col-lg-2"><button class="btn btn-warning" id="saveCancelReceiptEntry" onclick="saveCancelReceiptEntry();">New Entry</button></div>
     </div>
-    <form id="receiptForm" onsubmit="saveReceipt(); return false;" enctype="text/plain">
+    <br>
+    <br>
+    <div id="receiptViewForm">
+
+    </div>
+
+</div>
+<div id="paymentView" class="hidden">
+
+    <div class="row">
+        <div class="col-lg-12" style=" font-weight: bold; text-align: center;"><h2>Troubleshoot Technologies</h2></div>
+        <div class="col-lg-12" style=" font-weight: bold; text-align: center;"><h4>Committed to quality service</h4></div>
+        <div class="col-lg-12" style="text-align: left;"><h4>Payment Entry:</h4></div>
+        <br>
+        <br>
+        <div class="col-lg-2"><button class="btn btn-warning" id="saveCancelPaymentUser" onclick="saveCancelPaymentUser();">New Payment Name</button></div>
+        <div class="col-lg-2"><button class="btn btn-warning" id="saveCancelPaymentEntry" onclick="saveCancelPaymentEntry();">New Entry</button></div>
+    </div>
+    <br>
+    <br>
+    <div id="paymentViewForm">
+
+    </div>
+
+</div>
+
+<div id="receiptViewFormHtmlNewUser" class="hidden">
+    <form id="receiptFormUser" onsubmit="saveReceipt(); return false;" enctype="text/plain">
         <input id="receiptID" name="receiptID" type="hidden" value="NA">
-        <input id="receiptAction" name="receiptAction" type="hidden" value="UPDATE">
+        <input id="receiptAction" name="receiptAction" type="hidden" value="ADD">
         <div class="form-group">
             <div class="row">
 
-                <div class="col-lg-1"><button class="btn btn-warning" id="saveCancelREcceipt" onclick="addReceipt();">+</button></div>
+
                 <div class="col-lg-5">
-                     <label for="receiptName">Name:</label>
-                    <input type="text" class="form-control" style="display: none" id="receiptName" name="receiptName" value="NA">
-                    <select type="text" class="form-control" id="receiptNameselect" name="receiptNameselect"></select>
+                    <label for="receiptName">Name:</label>
+                    <input type="text" class="form-control" id="receiptName" name="receiptName" value="NA">
                 </div>
 
                 <div class="col-lg-6">
@@ -187,6 +217,77 @@
                 <div class="col-lg-6">
                     <label for="receiptMonth">Month:</label>
                     <input type="number" class="form-control" id="receiptMonth" name="receiptMonth">
+                </div>
+
+
+            </div>
+            <br>
+            <br>
+            <br>
+            <div class="row">
+                <div class="col-lg-8"></div>
+                <div class="col-lg-2">
+                    <button class="btn-lg btn-primary" onclick="view('container','receiptView',true); changeTab('receipt');">Back</button>
+                </div>
+                <div class="col-lg-2">
+                    <button class="btn-lg btn-primary" type="submit">Save</button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+</div>
+
+<div id="receiptViewFormHtmlNewEntry" class="hidden">
+    <div class="row">
+        <div class="col-lg-1" style=" font-weight: bold">Year</div>
+        <div class="col-lg-3">
+            <div class="form-group">
+                <select class="form-control" id="receiptSelectionYear">
+                    <option value="2016">2016</option>
+                    <option value="2017">2017</option>
+                    <option value="2018">2018</option>
+                    <option value="2019">2019</option>
+                    <option value="2020">2020</option>
+                    <option value="2021">2021</option>
+                    <option value="2022">2022</option>
+                    <option value="2023">2023</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="col-lg-1" style=" font-weight: bold">Month</div>
+        <div class="col-lg-3">
+            <div class="form-group">
+                <select class="form-control" id="receiptSelectionMonth">
+                    <option value="1">January</option>
+                    <option value="2">February</option>
+                    <option value="3">March</option>
+                    <option value="4">April</option>
+                    <option value="5">May</option>
+                    <option value="6">June</option>
+                    <option value="7">July</option>
+                    <option value="8">August</option>
+                    <option value="9">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <button class="btn btn-primary" onclick="getReceiptList();"> Get Receipt Name List</button>
+        </div>
+    </div>
+    <form id="receiptFormEntry" onsubmit="updateReceipt(); return false;" enctype="text/plain">
+        <input id="receiptID" name="receiptID" type="hidden" value="NA">
+        <input id="receiptAction" name="receiptAction" type="hidden" value="UPDATE">
+        <div class="form-group">
+            <div class="row">
+
+                <div class="col-lg-6">
+                    <label for="receiptNameselect">Name:</label>
+                    <select type="text" class="form-control" id="receiptNameselect" name="receiptNameselect"></select>
                 </div>
 
                 <div class="col-lg-6">
@@ -200,45 +301,44 @@
                 </div>
 
                 <div class="col-lg-6">
-                        <label for="receiptType">Receipt Type </label>
-                        <select class="form-control" id="receiptType" name="receiptType">
-                            <option value="1">Cash On Hand</option>
-                            <option value="2">Cash On Bank</option>
-                        </select>
+                    <label for="receiptType">Receipt Type </label>
+                    <select class="form-control" id="receiptType" name="receiptType">
+                        <option value="1">Cash On Hand</option>
+                        <option value="2">Cash On Bank</option>
+                    </select>
                 </div>
 
+
             </div>
-<br>
-<br>
-<br>
+
+            <br>
+            <br>
+            <br>
             <div class="row">
-                <div class="col-lg-10"></div>
+                <div class="col-lg-8"></div>
+                <div class="col-lg-2">
+                    <button class="btn-lg btn-primary" onclick="view('container','receiptView',true); changeTab('receipt');">Back</button>
+                </div>
                 <div class="col-lg-2">
                     <button class="btn-lg btn-primary" type="submit">Save</button>
                 </div>
+
             </div>
         </div>
     </form>
-</div>
-<div id="paymentView" class="hidden">
 
-    <div class="row">
-        <div class="col-lg-12" style=" font-weight: bold; text-align: center;"><h2>Troubleshoot Technologies</h2></div>
-        <div class="col-lg-12" style=" font-weight: bold; text-align: center;"><h4>Committed to quality service</h4></div>
-        <div class="col-lg-12" style="text-align: left;"><h4>Payment Entry:</h4></div>
-    </div>
-    <form id="paymentForm" onsubmit="savePayment(); return false;" enctype="text/plain">
+</div>
+
+<div id="paymentViewFormHtmlNewUser" class="hidden">
+
+    <form id="paymentFormUser" onsubmit="savePayment(); return false;" enctype="text/plain">
         <input id="paymentID" name="paymentID" type="hidden" value="NA">
-        <input id="paymentAction" name="paymentAction" type="hidden" value="UPDATE">
+        <input id="paymentAction" name="paymentAction" type="hidden" value="ADD">
         <div class="form-group">
             <div class="row">
-
-
-                <div class="col-lg-1"><button class="btn btn-warning" id="saveCancelPayment" onclick="addPayment();">+</button></div>
-                <div class="col-lg-5">
+                <div class="col-lg-6">
                     <label for="receiptName">Name:</label>
-                    <input type="text" class="form-control" style="display: none" id="paymentName" name="paymentName" value="NA">
-                    <select type="text" class="form-control" id="paymentNameselect" name="paymentNameselect"></select>
+                    <input type="text" class="form-control" id="paymentName" name="paymentName" value="NA">
                 </div>
 
                 <div class="col-lg-6">
@@ -249,6 +349,81 @@
                 <div class="col-lg-6">
                     <label for="paymentMonth">Month:</label>
                     <input type="number" class="form-control" id="paymentMonth" name="paymentMonth">
+                </div>
+
+            <br>
+            <br>
+            <br>
+            <div class="row">
+                <div class="col-lg-8"></div>
+                <div class="col-lg-2">
+                    <button class="btn-lg btn-primary" onclick="view('container','paymentView',true);changeTab('payment');">Back</button>
+                </div>
+                <div class="col-lg-2">
+                    <button class="btn-lg btn-primary" type="submit">Save</button>
+                </div>
+            </div>
+        </div>
+        </div>
+    </form>
+
+
+</div>
+
+
+<div id="paymentViewFormHtmlNewEntry" class="hidden">
+    <div class="row">
+        <div class="col-lg-1" style=" font-weight: bold">Year</div>
+        <div class="col-lg-3">
+            <div class="form-group">
+                <select class="form-control" id="paymentSelectionYear">
+                    <option value="2016">2016</option>
+                    <option value="2017">2017</option>
+                    <option value="2018">2018</option>
+                    <option value="2019">2019</option>
+                    <option value="2020">2020</option>
+                    <option value="2021">2021</option>
+                    <option value="2022">2022</option>
+                    <option value="2023">2023</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="col-lg-1" style=" font-weight: bold">Month</div>
+        <div class="col-lg-3">
+            <div class="form-group">
+                <select class="form-control" id="paymentSelectionMonth">
+                    <option value="1">January</option>
+                    <option value="2">February</option>
+                    <option value="3">March</option>
+                    <option value="4">April</option>
+                    <option value="5">May</option>
+                    <option value="6">June</option>
+                    <option value="7">July</option>
+                    <option value="8">August</option>
+                    <option value="9">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <button class="btn btn-primary" onclick="getPaymentList();"> Get Payment Name List</button>
+        </div>
+    </div>
+
+
+    <form id="paymentFormEntry" onsubmit="updatePayment(); return false;" enctype="text/plain">
+        <input id="paymentID" name="paymentID" type="hidden" value="NA">
+        <input id="paymentAction" name="paymentAction" type="hidden" value="UPDATE">
+        <div class="form-group">
+            <div class="row">
+
+
+                <div class="col-lg-6">
+                    <label for="paymentNameselect">Name:</label>
+                    <select type="text" class="form-control" id="paymentNameselect" name="paymentNameselect"></select>
                 </div>
 
                 <div class="col-lg-6">
@@ -269,11 +444,14 @@
                     </select>
                 </div>
             </div>
-<br>
-<br>
-<br>
+            <br>
+            <br>
+            <br>
             <div class="row">
-                <div class="col-lg-10"></div>
+                <div class="col-lg-8"></div>
+                <div class="col-lg-2">
+                    <button class="btn-lg btn-primary" onclick="view('container','paymentView',true);changeTab('payment');">Back</button>
+                </div>
                 <div class="col-lg-2">
                     <button class="btn-lg btn-primary" type="submit">Save</button>
                 </div>
@@ -282,7 +460,9 @@
     </form>
 
 
+
 </div>
+
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 

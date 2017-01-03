@@ -8,8 +8,10 @@
 
 include_once "config.php";
 $isError = 0;
+$year = $_REQUEST['year'];
+$month = $_REQUEST['month'];
 
-$qry = "SELECT Receipt_ID,Receipt_Name FROM receipt_list";
+$qry = "SELECT Receipt_ID,Receipt_Name FROM receipt_list WHERE ForYear = '$year' AND ForMonth = '$month' AND `status`='Active'";
 
 try{
     $res = Sql_exec($con,$qry);

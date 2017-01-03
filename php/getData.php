@@ -13,12 +13,14 @@ $year = $_REQUEST['year'];
 $month = $_REQUEST['month'];
 $type = $_REQUEST['type'];
 if($type=='payment') {
-    $qry = "SELECT * FROM payment_details WHERE ForYear = '$year' AND ForMonth = '$month'";
+    $qry = "SELECT * FROM payment_details WHERE ForYear = '$year' AND ForMonth = '$month' AND stattus='Active'";
 }elseif($type=='receipt'){
-    $qry= "SELECT * FROM receipt_details WHERE ForYear = '$year' AND ForMonth = '$month'";
+    $qry= "SELECT * FROM receipt_details WHERE ForYear = '$year' AND ForMonth = '$month' AND stattus='Active'";
 }else{
-
+    $Receipt_qry = "SELECT Receipt_Name, Total_Balance FROM receipt_details WHERE ForYear = '$year' AND ForMonth = '$month' AND stattus='Active'";
+    $payment_qry = "SELECT Payment_Name, Total_Balance FROM payment_details WHERE ForYear = '$year' AND ForMonth = '$month' AND stattus='Active'";
 }
+if($type!=='all'){
 
 try{
   $res = Sql_exec($con,$qry);
@@ -27,7 +29,7 @@ try{
  }
 
 $data = array(); $i=0;
-if($type!='all')
+
 while($dt = Sql_fetch_assoc($res)){
     $j=0;$sum=0;
 
@@ -291,5 +293,108 @@ while($dt = Sql_fetch_assoc($res)){
 $i++;
 
 }
+    echo json_encode(array("data" => $data));
+}
+else{
+    try{
+        $res = Sql_exec($con,$payment_qry);
+    }catch (Exception $e){
+        $isError = 1;
+    }
 
-echo json_encode(array("data" => $data));
+    $data = array(); $i=0;
+    while($dt = Sql_fetch_assoc($res)) {
+        $j = 0;
+        $data[$i][$j++] = $dt['Payment_Name'];
+        $data[$i][$j++] = $dt['Total_Balance'];
+        $i++;
+    }
+
+    try{
+        $res1 = Sql_exec($con,$Receipt_qry);
+    }catch (Exception $e){
+        $isError = 1;
+    }
+
+    $data1 = array(); $i=0;
+    while($dt1 = Sql_fetch_assoc($res1)) {
+        $j = 0;
+        $data1[$i][$j++] = $dt1['Receipt_Name'];
+        $data1[$i][$j++] = $dt1['Total_Balance'];
+        $i++;
+    }
+//print_r($data);
+//print_r($data1);
+
+    $pcount=count($data);
+    $rcount=count($data1);
+    $data2=array();
+    $sumPayment = 0; $sumReceipt = 0; $sumTotal = 0;
+    if($pcount>$rcount){
+
+        for($i=0,$k=1; $i<$pcount; $i++,$k++){
+            $j=0;
+            $data2[$i][$j++]= $k;
+
+            $data2[$i][$j++]= $data[$i][0];
+            $data2[$i][$j++]= $data[$i][1];
+            $sumPayment+=$data[$i][1];
+
+            if(!isset($data1[$i][0])||$data1[$i][0]==''){
+                $data2[$i][$j++]='--';
+                $data2[$i][$j++]='--';
+            }
+            else{
+                $data2[$i][$j++]= $data1[$i][0];
+                $data2[$i][$j++]= $data1[$i][1];
+                $sumReceipt+=$data1[$i][1];
+            }
+        }
+        $data2[$i][0]= $k;
+
+        $data2[$i][1]='Receipt during this month';
+        $data2[$i][2]=$sumReceipt;
+        $data2[$i][3]='Balances';
+        $data2[$i][4]= $sumPayment;
+        $i++;$k++;
+        $data2[$i][0]= $k;
+        $data2[$i][1]='Closing Balance';
+        $data2[$i][2]=$sumReceipt-$sumPayment;
+        $data2[$i][3]='--';
+        $data2[$i][4]='--';
+
+    }
+    else{
+
+        for($i=0,$k=1; $i<$rcount; $i++, $k++){
+            $j=0;
+            $data2[$i][$j++]= $k;
+
+            $data2[$i][$j++]= $data1[$i][0];
+            $data2[$i][$j++]= $data1[$i][1];
+            $sumReceipt+=$data1[$i][1];
+
+            if(!isset($data[$i][0])||$data[$i][0]==''){
+                $data2[$i][$j++]= '--';
+                $data2[$i][$j++]= '--';
+            }
+            else{
+                $data2[$i][$j++]= $data[$i][0];
+                $data2[$i][$j++]= $data[$i][1];
+                $sumPayment+=$data[$i][1];
+            }
+        }
+        $data2[$i][0]= $k;
+        $data2[$i][1]='Receipt during this month';
+        $data2[$i][2]=$sumReceipt;
+        $data2[$i][3]='Balances';
+        $data2[$i][4]= $sumPayment;
+        $i++;$k++;
+        $data2[$i][0]= $k;
+        $data2[$i][1]='Closing Balance';
+        $data2[$i][2]=$sumReceipt-$sumPayment;
+        $data2[$i][3]='--';
+        $data2[$i][4]='--';
+    }
+    echo json_encode(array("data" => $data2));
+}
