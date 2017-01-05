@@ -19,3 +19,35 @@
     project_name ='/'+ site_host_temp[site_host_temp.length - 2];
     service_host = site_host + projrct_url + project_name+'/php/';
     service_url = new Array();
+
+
+function ConfirmBackToPayment(){
+    modal({
+        type: 'confirm',
+        title: 'Confirm',
+        text: 'Are you sure you want to Go Back?',
+        callback: function(result) {
+            if(result==true){
+                view('container','paymentView',true);changeTab('payment');
+            }
+            else {
+
+            }
+        }
+    });
+}
+function ConfirmBackToReceipt(){
+    modal({
+            type: 'confirm',
+            title: 'Confirm',
+            text: 'Are you sure you want to Go Back?',
+        callback: function(result) {
+            if(result==true){
+                view('container','receiptView',true); changeTab('receipt');
+            }
+            else {
+
+            }
+        }
+    });
+}

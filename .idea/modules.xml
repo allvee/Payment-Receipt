@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/alveePro.iml" filepath="$PROJECT_DIR$/.idea/alveePro.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/PaymentReceipt.iml" filepath="$PROJECT_DIR$/.idea/PaymentReceipt.iml" />
     </modules>
   </component>
 </project>

@@ -12,6 +12,10 @@ $isError = 0;
 $year = $_REQUEST['year'];
 $month = $_REQUEST['month'];
 $type = $_REQUEST['type'];
+$day31=array("1","3","5","7","8","10","12");
+$day30=array("4","6","9","11");
+
+
 if($type=='payment') {
     $qry = "SELECT * FROM payment_details WHERE ForYear = '$year' AND ForMonth = '$month' AND stattus='Active'";
 }elseif($type=='receipt'){
@@ -20,6 +24,27 @@ if($type=='payment') {
     $Receipt_qry = "SELECT Receipt_Name, Total_Balance FROM receipt_details WHERE ForYear = '$year' AND ForMonth = '$month' AND stattus='Active'";
     $payment_qry = "SELECT Payment_Name, Total_Balance FROM payment_details WHERE ForYear = '$year' AND ForMonth = '$month' AND stattus='Active'";
 }
+
+function leapYear($year)
+    {
+        return (($year % 4 == 0) && ($year % 100 != 0)) || ($year % 400 == 0);
+    }
+
+$currentMonth=0;
+
+if (in_array($month, $day31, TRUE)){
+    $currentMonth=31;
+}
+elseif(in_array($month, $day31, TRUE)){
+    $currentMonth=30;
+}
+else{
+    if(leapYear($year))
+        $currentMonth=29;
+    else
+        $currentMonth=28;
+}
+
 if($type!=='all'){
 
 try{
@@ -28,8 +53,7 @@ try{
      $isError = 1;
  }
 
-$data = array(); $i=0;
-
+$data = array(); $i=0; $totalsum=0;
 while($dt = Sql_fetch_assoc($res)){
     $j=0;$sum=0;
 
@@ -289,10 +313,22 @@ while($dt = Sql_fetch_assoc($res)){
         $data[$i][$j++] ='';
         $sum = $sum+$dt['31_amount'];
     }
-    $data[$i][$j++] = $sum;
-$i++;
+   // $data[$i][$j++] = $sum;
+    if($dt['Total_Balance'] != 0) {
+        $data[$i][$j++] = $dt['Total_Balance'];
+        $totalsum=$totalsum+(int)$dt['Total_Balance'];
+    }
+    else
+        $data[$i][$j++] = '0';
 
+    $i++;
 }
+
+   for($l=0;$l<($currentMonth+1);$l++){
+        $data[$i][$l] = '--';
+    }
+    $data[$i][$l++] = $totalsum;
+    //print_r($data);
     echo json_encode(array("data" => $data));
 }
 else{
@@ -352,14 +388,14 @@ else{
         }
         $data2[$i][0]= $k;
 
-        $data2[$i][1]='Receipt during this month';
-        $data2[$i][2]=$sumReceipt;
-        $data2[$i][3]='Balances';
-        $data2[$i][4]= $sumPayment;
+        $data2[$i][1]='<b>Receipt during this month</b>';
+        $data2[$i][2]='<b>'.$sumReceipt.'</b>';
+        $data2[$i][3]='<b>Balances</b>';
+        $data2[$i][4]= '<b>'.$sumPayment.'</b>';
         $i++;$k++;
         $data2[$i][0]= $k;
-        $data2[$i][1]='Closing Balance';
-        $data2[$i][2]=$sumReceipt-$sumPayment;
+        $data2[$i][1]='<b>Closing Balance</b>';
+        $data2[$i][2]='<b>'.($sumReceipt-$sumPayment).'</b>';
         $data2[$i][3]='--';
         $data2[$i][4]='--';
 
@@ -385,14 +421,14 @@ else{
             }
         }
         $data2[$i][0]= $k;
-        $data2[$i][1]='Receipt during this month';
-        $data2[$i][2]=$sumReceipt;
-        $data2[$i][3]='Balances';
-        $data2[$i][4]= $sumPayment;
+        $data2[$i][1]='<b>Receipt during this month</b>';
+        $data2[$i][2]='<b>'.$sumReceipt.'</b>';
+        $data2[$i][3]='<b>Balances</b>';
+        $data2[$i][4]= '<b>'.$sumPayment.'</b>';
         $i++;$k++;
         $data2[$i][0]= $k;
-        $data2[$i][1]='Closing Balance';
-        $data2[$i][2]=$sumReceipt-$sumPayment;
+        $data2[$i][1]='<b>Closing Balance</b>';
+        $data2[$i][2]='<b>'.$sumReceipt-$sumPayment.'</b>';
         $data2[$i][3]='--';
         $data2[$i][4]='--';
     }
