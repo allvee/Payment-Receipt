@@ -5,7 +5,7 @@
  * Date: 12/25/2016
  * Time: 4:03 AM
  */
-
+session_start();
 
 	include_once "config.php";
 
@@ -19,6 +19,9 @@
         echo false;
     }else{
         echo $login;
+       /* $fp=fopen('auth.txt','a+');
+        fwrite($fp, $login);
+        fclose($fp);*/
     }
 	die();
 ?>

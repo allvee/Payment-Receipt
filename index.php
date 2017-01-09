@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="popup/css/jquery.modal.theme-atlant.css">
     <link rel="stylesheet" href="popup/css/jquery.modal.theme-xenon.css">
 </head>
+
 <body>
 <div class="container">
     <div id="header" style="display: none">
@@ -23,14 +24,14 @@
                 <div class="col-lg-12">
                     <nav class="navbar navbar-default">
                         <div class="container-fluid">
-                            <div class="navbar-header">
-                                <img src="images/logo.png" alt="Logo" style="width:200px;height:70px;">
-                            </div>
-                            <ul class="nav navbar-nav" style="align: right;">
+                            <div class="navbar-header" style="margin-right: 40%">
+                                <img src="images/logo.png" alt="Logo" style="width:150px;height:100px;">
+                            </div >
+                            <ul class="nav navbar-nav">
                                 <li class="active btn" id="home" onclick="view('container','homeView',true);changeTab('home');"><a>Home</a></li>
                                 <li class="btn" id="receipt" onclick="view('container','receiptView',true); changeTab('receipt');"><a>Receipt</a></li>
                                 <li class="btn" id="payment" onclick="view('container','paymentView',true);changeTab('payment');"><a>payment</a></li>
-								<li  class="btn" onclick="logout();"><a>Logout</a></li>
+								<li  class="btn" onclick="logout();"> <a>Logout<span id="loguser">()</span></a></li>
                             </ul>
                         </div>
                     </nav>
@@ -126,22 +127,24 @@
             </div>
         </div>
         <div class="col-lg-12"><br></div>
-        <div class="col-lg-1">
-            <div class="radio">
-                <label style=" font-weight: bold"><input type="radio" name="dataViewView" id="paymentViewdt">PAYMENT</label>
-            </div>
-        </div>
-        <div class="col-lg-1">
+        <div class="col-lg-1"></div>
+        <div class="col-lg-2">
             <div class="radio">
                 <label style=" font-weight: bold"><input type="radio" name="dataViewView" id="receiptViewdt">RECEIPT</label>
             </div>
         </div>
-        <div class="col-lg-1">
+
+        <div class="col-lg-2">
+            <div class="radio">
+                <label style=" font-weight: bold"><input type="radio" name="dataViewView" id="paymentViewdt">PAYMENT</label>
+            </div>
+        </div>
+
+        <div class="col-lg-2">
             <div class="radio">
                 <label style=" font-weight: bold"><input type="radio" name="dataViewView" id="allViewdt" checked="checked">JOURNAL</label>
             </div>
         </div>
-        <div class="col-lg-6"></div>
         <div class="col-lg-5">
             <button class="btn btn-primary" onclick="getData();"> SHOW REPORT</button>
         </div>
@@ -304,8 +307,41 @@
                 </div>
 
                 <div class="col-lg-6">
-                    <label for="receiptDay">Day:</label>
-                    <input type="number" class="form-control" id="receiptDay" name="receiptDay">
+                    <label for="receiptDay">Date:</label>
+                    <select class="form-control" id="receiptDay" name="receiptDay">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                        <option value="15">15</option>
+                        <option value="16">16</option>
+                        <option value="17">17</option>
+                        <option value="18">18</option>
+                        <option value="19">19</option>
+                        <option value="20">20</option>
+                        <option value="21">21</option>
+                        <option value="22">22</option>
+                        <option value="23">23</option>
+                        <option value="24">24</option>
+                        <option value="25">25</option>
+                        <option value="26">26</option>
+                        <option value="27">27</option>
+                        <option value="28">28</option>
+                        <option value="29">29</option>
+                        <option value="30">30</option>
+                        <option value="31">31</option>
+                    </select>
+
                 </div>
 
                 <div class="col-lg-6">

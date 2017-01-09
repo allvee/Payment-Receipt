@@ -10,6 +10,10 @@ service_url['getData'] = service_host+'getData.php';
 service_url['getViewData'] = service_host+'getViewData.php';
 service_url['getReceiptList'] = service_host+'getReceiptList.php';
 service_url['getPaymentList'] = service_host+'getPaymentList.php';
+service_url['deletePaymentEntry'] = service_host+'deletePaymentEntry.php';
+service_url['deletePaymentName'] = service_host+'deletePaymentName.php';
+service_url['deleteReceiptEntry'] = service_host+'deleteReceiptEntry.php';
+service_url['deleteReceiptName'] = service_host+'deleteReceiptName.php';
 
 function loginController() {
 
@@ -18,13 +22,19 @@ function loginController() {
                 if (data.response != false) {
                     sessionStorage.setItem( 'is_auth', data);
                     var auth_status = sessionStorage.getItem('is_auth');
+                    var login_info = JSON.parse(data.response);
                     if (auth_status != null) {
+                        console.log(login_info);
+                        alert(login_info[0].name);
+                        $("#loguser").text(login_info[0].name);
+                       // document.getElementById("loguser").textContent=login_info[0].name;
                         location.reload();
+                        view('loguser', login_info[0].name);
                     } else {
                         view('login_holder', 'login_directory');
                     }
                 } else {
-                    warningmsg('Username and password does not match.');
+                    warningmsg('Username and password does not matched.');
                 }
             }
         });
@@ -69,6 +79,8 @@ function saveReceipt(){
 }
 
 function updateReceipt(){
+    var day=$("#receiptDay").val();
+    alert(day);
 
     if($("#receiptID").val()=='NA'){
         $("#receiptID").val($("#receiptNameselect").val());
@@ -121,6 +133,10 @@ function savePayment(){
 
 
 function updatePayment(){
+
+
+   var day= $("#paymentDay").val();
+    alert(day);
 
     if($("#paymentID").val()=='NA')
     {
@@ -293,7 +309,7 @@ function generateColumn(year,month,type) {
 
     } else {
         var bool = leapYear(year);
-        alert(bool);
+        //alert(bool);
         if (bool) {
             for (var i = 0; i < 31; i++) {
                 dateCOl[i] = [];
@@ -365,6 +381,7 @@ function generateColumn(year,month,type) {
 function changeEntry(type,id,col){
 
     var dataIn = 'type='+type+'&id='+id+'&col='+col;
+   // alert(col);
     if(type == 1){
 
         view('container','paymentView',true);changeTab('payment');
@@ -373,19 +390,26 @@ function changeEntry(type,id,col){
         getJson(dataIn,service_url['getViewData'],function (data) {
             if (data.readyState == 4) {
 
-
                 var dataInfo = JSON.parse(data.response);
 
-                $('#paymentSelectionYear').attr("disabled", true);
-                $('#paymentSelectionMonth').attr("disabled", true);
-                $('#paymentNameselect').attr("disabled", true);
+                $("#paymentDay option[value='" + dataInfo[0][5] + "']").attr('selected', true);
+                $("#paymentNameselect option[value='" + id + "']").attr('selected', true);
 
-                $('#paymentNameselect').val(id);
-                $("#paymentDay").val(dataInfo[0][5]);
+                $("#paymentSelectionYear option[value='" + dataInfo[0][3] + "']").attr('selected', true);
+                $("#paymentSelectionMonth option[value='" + dataInfo[0][4]+ "']").attr('selected', true);
+
+
+                //$('#paymentNameselect').val(id);
+                //$("#paymentDay").val(dataInfo[0][5]);
                 $("#paymentAmount").val(dataInfo[0][6]);
                 $("#paymentType").val();
                 $("#paymentID").val(id);
                 $("#paymentAction").val('UPDATE');
+
+                $('#paymentSelectionYear').attr("readonly", true);
+                $('#paymentSelectionMonth').attr("readonly", true);
+                $('#paymentNameselect').attr("readonly", true);
+                $('#paymentDay').attr("readonly", true);
             }
         });
 
@@ -398,16 +422,23 @@ function changeEntry(type,id,col){
             if (data.readyState == 4) {
                 var dataInfo = JSON.parse(data.response);
 
-                $('#receiptSelectionYear').attr("disabled", true);
-                $('#receiptSelectionMonth').attr("disabled", true);
-                $('#receiptNameselect').attr("disabled", true);
+                $("#receiptDay option[value='" + dataInfo[0][5] + "']").attr('selected', true);
+                $("#receiptNameselect option[value='" + id + "']").attr('selected', true);
 
-                $('#receiptNameselect').val(id);
-                $("#receiptDay").val(dataInfo[0][5]);
+                $("#receiptSelectionYear option[value='" + dataInfo[0][3] + "']").attr('selected', true);
+                $("#receiptSelectionMonth option[value='" + dataInfo[0][4]+ "']").attr('selected', true);
+
+               // $('#receiptNameselect').val(id);
+                //$("#receiptDay").val(dataInfo[0][5]);
                 $("#receiptAmount").val(dataInfo[0][6]);
                 $("#receiptType").val();
                 $("#receiptID").val(id);
                 $("#receiptAction").val('UPDATE');
+
+                $('#receiptSelectionYear').attr("readonly", true);
+                $('#receiptSelectionMonth').attr("readonly", true);
+                $('#receiptNameselect').attr("readonly", true);
+                $('#receiptDay').attr("readonly", true);
             }
         });
 
@@ -416,6 +447,109 @@ function changeEntry(type,id,col){
 
 }
 
+function ConfirmBackToReceipt(){
+    modal({
+        type: 'confirm',
+        title: 'Confirm',
+        text: 'Are you sure you want to Go Back?',
+        callback: function(result) {
+            if(result==true){
+                view('container','receiptView',true); changeTab('receipt');
+            }
+            else {
+
+            }
+        }
+    });
+}
+
+function deleteEntry(type,id,col,year,month){
+
+    var dataIn = 'type='+type+'&id='+id+'&col='+col+'&year='+year+'&month='+month;
+
+    modal({
+        type: 'confirm',
+        title: 'Confirm',
+        text: 'Are you sure you want to Delete?',
+        callback: function(result) {
+            if(result==true){
+
+                if(type == 1){
+
+                    getJson(dataIn,service_url['deletePaymentEntry'],function (data) {
+                        if (data.readyState == 4) {
+                            var dataInfo = JSON.parse(data.response);
+                            Successmsg('Payment Entry Delete Success.');
+
+                            view('container','homeView',true);changeTab('home');
+                            getData();
+                        }
+                    });
+                }
+                else if(type == 2){
+
+                    getJson(dataIn,service_url['deleteReceiptEntry'],function (data) {
+                        if (data.readyState == 4) {
+                            var dataInfo = JSON.parse(data.response);
+                            Successmsg('Receipt Entry Delete Success.');
+
+                            view('container','homeView',true);changeTab('home');
+                            getData();
+                        }
+                    });
+
+                }
+
+            }
+        }
+    });
+
+}
+
+function deleteNames(type,id,year,month){
+
+    var dataIn = 'type='+type+'&id='+id+'&year='+year+'&month='+month;
+
+    modal({
+        type: 'confirm',
+        title: 'Confirm',
+        text: 'Are you sure you want to Delete?',
+        callback: function(result) {
+            if(result==true){
+
+                if(type == 1){
+
+                    getJson(dataIn,service_url['deletePaymentName'],function (data) {
+                        if (data.readyState == 4) {
+                            var dataInfo = JSON.parse(data.response);
+                            Successmsg('Payment Name Delete Success.');
+
+                            view('container','homeView',true);changeTab('home');
+                            getData();
+                        }
+                    });
+                }
+                else if(type == 2){
+
+                    getJson(dataIn,service_url['deleteReceiptName'],function (data) {
+                        if (data.readyState == 4) {
+                            var dataInfo = JSON.parse(data.response);
+                            Successmsg('Receipt Name Delete Success.');
+
+                            view('container','homeView',true);changeTab('home');
+                            getData();
+                        }
+                    });
+
+                }
+
+            }
+            else {
+
+            }
+        }
+    });
+}
 
 function getReceiptList(){
     var year = $("#receiptSelectionYear").val();

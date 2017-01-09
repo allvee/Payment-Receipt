@@ -12,6 +12,7 @@ $isError = 0;
 $year = $_REQUEST['year'];
 $month = $_REQUEST['month'];
 $type = $_REQUEST['type'];
+$usertype=$_SESSION['usertype'];
 $day31=array("1","3","5","7","8","10","12");
 $day30=array("4","6","9","11");
 
@@ -35,7 +36,7 @@ $currentMonth=0;
 if (in_array($month, $day31, TRUE)){
     $currentMonth=31;
 }
-elseif(in_array($month, $day31, TRUE)){
+elseif(in_array($month, $day30, TRUE)){
     $currentMonth=30;
 }
 else{
@@ -57,56 +58,65 @@ $data = array(); $i=0; $totalsum=0;
 while($dt = Sql_fetch_assoc($res)){
     $j=0;$sum=0;
 
+if($usertype=='Admin'){
     if($type=='payment'){
-        $data[$i][$j++] = $dt['Payment_Name'];
         $id = $dt['Payment_ID'];$typeNo = 1;
+        $data[$i][$j++] = $dt['Payment_Name'].'<a class="btn-xs button-Primary" onclick="deleteNames('.$typeNo.','.$id.','.$year.','.$month.');"><img src="images/cancel.png" alt="Delete"></a>';
+
     }else{
-        $data[$i][$j++] = $dt['Receipt_Name'];
         $id = $dt['Receipt_ID'];$typeNo = 2;
+        $data[$i][$j++] = $dt['Receipt_Name'].'<a class="btn-xs button-Primary" onclick="deleteNames('.$typeNo.','.$id.','.$year.','.$month.');"><img src="images/cancel.png" alt="Delete"></a>';
+
     }
 
     if($dt['1_amount'] != 0){
-        $data[$i][$j++] = $dt['1_amount'].'<a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',1);">EDIT</a>';
+        $data[$i][$j++] = $dt['1_amount'].'<span> <a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',1);"><img src="images/pen.png" alt="Edit"></a> </span>
+         &nbsp&nbsp <span>  <a class="btn-xs button-Primary" onclick="deleteEntry('.$typeNo.','.$id.',1,'.$year.','.$month.');"><img src="images/cancel.png" alt="Delete"></a> </span>';
         $sum = $sum+$dt['1_amount'];
     }else{
 
         $data[$i][$j++] ='';
         $sum = $sum+$dt['1_amount'];
     }
-   if($dt['2_amount'] != 0){
-       $data[$i][$j++] = $dt['2_amount'].'<a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',2);">EDIT</a>';;
-       $sum = $sum+$dt['2_amount'];
+    if($dt['2_amount'] != 0){
+        $data[$i][$j++] = $dt['2_amount'].'<span> <a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',2);"><img src="images/pen.png" alt="Edit"></a> </span>
+         &nbsp&nbsp<span>  <a class="btn-xs button-Primary" onclick="deleteEntry('.$typeNo.','.$id.',2,'.$year.','.$month.');"><img src="images/cancel.png" alt="Delete"></a> </span>';
+        $sum = $sum+$dt['2_amount'];
     }else{
-       $data[$i][$j++] ='';
-       $sum = $sum+$dt['2_amount'];
+        $data[$i][$j++] ='';
+        $sum = $sum+$dt['2_amount'];
 
-   }
+    }
     if($dt['3_amount'] != 0){
-        $data[$i][$j++] = $dt['3_amount'].'<a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',3);">EDIT</a>';;
+        $data[$i][$j++] = $dt['3_amount'].'<span> <a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',3);"><img src="images/pen.png" alt="Edit"></a> </span>
+         &nbsp&nbsp<span>  <a class="btn-xs button-Primary" onclick="deleteEntry('.$typeNo.','.$id.',3,'.$year.','.$month.');"><img src="images/cancel.png" alt="Delete"></a> </span>';
         $sum = $sum+$dt['3_amount'];
     }else{
         $data[$i][$j++] ='';
         $sum = $sum+$dt['3_amount'];
 
     }
-   if($dt['4_amount'] != 0){
-       $data[$i][$j++] = $dt['4_amount'].'<a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',4);">EDIT</a>';;
-       $sum = $sum+$dt['4_amount'];
+    if($dt['4_amount'] != 0){
+        $data[$i][$j++] = $dt['4_amount'].'<span> <a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',4);"><img src="images/pen.png" alt="Edit"></a> </span>
+         &nbsp&nbsp<span>  <a class="btn-xs button-Primary" onclick="deleteEntry('.$typeNo.','.$id.',4,'.$year.','.$month.');"><img src="images/cancel.png" alt="Delete"></a> </span>';
+        $sum = $sum+$dt['4_amount'];
     }else{
-       $data[$i][$j++] ='';
-       $sum = $sum+$dt['4_amount'];
+        $data[$i][$j++] ='';
+        $sum = $sum+$dt['4_amount'];
 
-   }
-  if($dt['5_amount'] != 0){
-      $data[$i][$j++] = $dt['5_amount'].'<a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',5);">EDIT</a>';;
-      $sum = $sum+$dt['5_amount'];
+    }
+    if($dt['5_amount'] != 0){
+        $data[$i][$j++] = $dt['5_amount'].'<span> <a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',5);"><img src="images/pen.png" alt="Edit"></a> </span>
+         &nbsp&nbsp<span>  <a class="btn-xs button-Primary" onclick="deleteEntry('.$typeNo.','.$id.',5,'.$year.','.$month.');"><img src="images/cancel.png" alt="Delete"></a> </span>';
+        $sum = $sum+$dt['5_amount'];
     }else{
-      $data[$i][$j++] ='';
-      $sum = $sum+$dt['5_amount'];
+        $data[$i][$j++] ='';
+        $sum = $sum+$dt['5_amount'];
 
-  }
+    }
     if($dt['6_amount'] != 0){
-        $data[$i][$j++] = $dt['6_amount'].'<a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',6);">EDIT</a>';;
+        $data[$i][$j++] = $dt['6_amount'].'<span> <a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',6);"><img src="images/pen.png" alt="Edit"></a> </span>
+         &nbsp&nbsp<span>  <a class="btn-xs button-Primary" onclick="deleteEntry('.$typeNo.','.$id.',6,'.$year.','.$month.');"><img src="images/cancel.png" alt="Delete"></a> </span>';
         $sum = $sum+$dt['6_amount'];
     }else{
         $data[$i][$j++] ='';
@@ -114,111 +124,125 @@ while($dt = Sql_fetch_assoc($res)){
 
     }
     if($dt['7_amount'] != 0){
-        $data[$i][$j++] = $dt['7_amount'].'<a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',7);">EDIT</a>';;
+        $data[$i][$j++] = $dt['7_amount'].'<span> <a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',7);"><img src="images/pen.png" alt="Edit"></a> </span>
+         &nbsp&nbsp<span>  <a class="btn-xs button-Primary" onclick="deleteEntry('.$typeNo.','.$id.',7,'.$year.','.$month.');"><img src="images/cancel.png" alt="Delete"></a> </span>';
         $sum = $sum+$dt['7_amount'];
     }else{
         $data[$i][$j++] ='';
         $sum = $sum+$dt['7_amount'];
 
     }
-   if($dt['8_amount'] != 0){
-       $data[$i][$j++] = $dt['8_amount'].'<a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',8);">EDIT</a>';;
-       $sum = $sum+$dt['8_amount'];
+    if($dt['8_amount'] != 0){
+        $data[$i][$j++] = $dt['8_amount'].'<span> <a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',8);"><img src="images/pen.png" alt="Edit"></a> </span>
+         &nbsp&nbsp<span>  <a class="btn-xs button-Primary" onclick="deleteEntry('.$typeNo.','.$id.',8,'.$year.','.$month.');"><img src="images/cancel.png" alt="Delete"></a> </span>';
+        $sum = $sum+$dt['8_amount'];
     }else{
-       $data[$i][$j++] ='';
-       $sum = $sum+$dt['8_amount'];
+        $data[$i][$j++] ='';
+        $sum = $sum+$dt['8_amount'];
 
-   }
-   if($dt['9_amount'] != 0){
-       $data[$i][$j++] = $dt['9_amount'].'<a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',9);">EDIT</a>';;
-       $sum = $sum+$dt['9_amount'];
+    }
+    if($dt['9_amount'] != 0){
+        $data[$i][$j++] = $dt['9_amount'].'<span> <a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',9);"><img src="images/pen.png" alt="Edit"></a> </span>
+         &nbsp&nbsp<span>  <a class="btn-xs button-Primary" onclick="deleteEntry('.$typeNo.','.$id.',9,'.$year.','.$month.');"><img src="images/cancel.png" alt="Delete"></a> </span>';
+        $sum = $sum+$dt['9_amount'];
     }else{
-       $data[$i][$j++] ='';
-       $sum = $sum+$dt['9_amount'];
+        $data[$i][$j++] ='';
+        $sum = $sum+$dt['9_amount'];
 
-   }
+    }
     if($dt['10_amount'] != 0){
-        $data[$i][$j++] = $dt['10_amount'].'<a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',10);">EDIT</a>';;
+        $data[$i][$j++] = $dt['10_amount'].'<span> <a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',10);"><img src="images/pen.png" alt="Edit"></a> </span>
+         &nbsp&nbsp<span>  <a class="btn-xs button-Primary" onclick="deleteEntry('.$typeNo.','.$id.',10,'.$year.','.$month.');"><img src="images/cancel.png" alt="Delete"></a> </span>';
         $sum = $sum+$dt['10_amount'];
     }else{
         $data[$i][$j++] ='';
         $sum = $sum+$dt['10_amount'];
 
     }
-   if($dt['11_amount'] != 0){
-       $data[$i][$j++] = $dt['11_amount'].'<a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',11);">EDIT</a>';;
-       $sum = $sum+$dt['11_amount'];
+    if($dt['11_amount'] != 0){
+        $data[$i][$j++] = $dt['11_amount'].'<span> <a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',11);"><img src="images/pen.png" alt="Edit"></a> </span>
+         &nbsp&nbsp<span>  <a class="btn-xs button-Primary" onclick="deleteEntry('.$typeNo.','.$id.',11,'.$year.','.$month.');"><img src="images/cancel.png" alt="Delete"></a> </span>';
+        $sum = $sum+$dt['11_amount'];
     }else{
-       $data[$i][$j++] ='';
-       $sum = $sum+$dt['11_amount'];
+        $data[$i][$j++] ='';
+        $sum = $sum+$dt['11_amount'];
 
-   }
+    }
     if($dt['12_amount'] != 0){
-        $data[$i][$j++] = $dt['12_amount'].'<a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',12);">EDIT</a>';;
+        $data[$i][$j++] = $dt['12_amount'].'<span> <a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',12);"><img src="images/pen.png" alt="Edit"></a> </span>
+         &nbsp&nbsp<span>  <a class="btn-xs button-Primary" onclick="deleteEntry('.$typeNo.','.$id.',12,'.$year.','.$month.');"><img src="images/cancel.png" alt="Delete"></a> </span>';
         $sum = $sum+$dt['12_amount'];
     }else{
         $data[$i][$j++] ='';
         $sum = $sum+$dt['12_amount'];
 
     }
-   if($dt['13_amount'] != 0){
-       $data[$i][$j++] = $dt['13_amount'].'<a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',13);">EDIT</a>';;
-       $sum = $sum+$dt['13_amount'];
+    if($dt['13_amount'] != 0){
+        $data[$i][$j++] = $dt['13_amount'].'<span> <a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',13);"><img src="images/pen.png" alt="Edit"></a> </span>
+         &nbsp&nbsp<span>  <a class="btn-xs button-Primary" onclick="deleteEntry('.$typeNo.','.$id.',13,'.$year.','.$month.');"><img src="images/cancel.png" alt="Delete"></a> </span>';
+        $sum = $sum+$dt['13_amount'];
     }else{
-       $data[$i][$j++] ='';
-       $sum = $sum+$dt['13_amount'];
+        $data[$i][$j++] ='';
+        $sum = $sum+$dt['13_amount'];
 
-   }
+    }
     if($dt['14_amount'] != 0){
-        $data[$i][$j++] = $dt['14_amount'].'<a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',14);">EDIT</a>';;
+        $data[$i][$j++] = $dt['14_amount'].'<span> <a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',14);"><img src="images/pen.png" alt="Edit"></a> </span>
+         &nbsp&nbsp<span>  <a class="btn-xs button-Primary" onclick="deleteEntry('.$typeNo.','.$id.',14,'.$year.','.$month.');"><img src="images/cancel.png" alt="Delete"></a> </span>';
         $sum = $sum+$dt['14_amount'];
     }else{
         $data[$i][$j++] ='';
         $sum = $sum+$dt['14_amount'];
 
     }
-   if($dt['15_amount'] != 0){
-       $data[$i][$j++] = $dt['15_amount'].'<a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',15);">EDIT</a>';;
-       $sum = $sum+$dt['15_amount'];
+    if($dt['15_amount'] != 0){
+        $data[$i][$j++] = $dt['15_amount'].'<span> <a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',15);"><img src="images/pen.png" alt="Edit"></a> </span>
+         &nbsp&nbsp<span>  <a class="btn-xs button-Primary" onclick="deleteEntry('.$typeNo.','.$id.',15,'.$year.','.$month.');"><img src="images/cancel.png" alt="Delete"></a> </span>';
+        $sum = $sum+$dt['15_amount'];
     }else{
-       $data[$i][$j++] ='';
-       $sum = $sum+$dt['15_amount'];
+        $data[$i][$j++] ='';
+        $sum = $sum+$dt['15_amount'];
 
-   }
-  if($dt['16_amount'] != 0){
-      $data[$i][$j++] = $dt['16_amount'].'<a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',16);">EDIT</a>';;
-      $sum = $sum+$dt['16_amount'];
+    }
+    if($dt['16_amount'] != 0){
+        $data[$i][$j++] = $dt['16_amount'].'<span> <a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',16);"><img src="images/pen.png" alt="Edit"></a> </span>
+         &nbsp&nbsp<span>  <a class="btn-xs button-Primary" onclick="deleteEntry('.$typeNo.','.$id.',16,'.$year.','.$month.');"><img src="images/cancel.png" alt="Delete"></a> </span>';
+        $sum = $sum+$dt['16_amount'];
     }else{
-      $data[$i][$j++] ='';
-      $sum = $sum+$dt['16_amount'];
+        $data[$i][$j++] ='';
+        $sum = $sum+$dt['16_amount'];
 
-  }
+    }
     if($dt['17_amount'] != 0){
-        $data[$i][$j++] = $dt['17_amount'].'<a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',17);">EDIT</a>';;
+        $data[$i][$j++] = $dt['17_amount'].'<span> <a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',17);"><img src="images/pen.png" alt="Edit"></a> </span>
+         &nbsp&nbsp<span>  <a class="btn-xs button-Primary" onclick="deleteEntry('.$typeNo.','.$id.',17,'.$year.','.$month.');"><img src="images/cancel.png" alt="Delete"></a> </span>';
         $sum = $sum+$dt['17_amount'];
     }else{
         $data[$i][$j++] ='';
         $sum = $sum+$dt['17_amount'];
 
     }
-   if($dt['18_amount'] != 0){
-       $data[$i][$j++] = $dt['18_amount'].'<a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',18);">EDIT</a>';;
-       $sum = $sum+$dt['18_amount'];
+    if($dt['18_amount'] != 0){
+        $data[$i][$j++] = $dt['18_amount'].'<span> <a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',18);"><img src="images/pen.png" alt="Edit"></a> </span>
+         &nbsp&nbsp<span>  <a class="btn-xs button-Primary" onclick="deleteEntry('.$typeNo.','.$id.',18,'.$year.','.$month.');"><img src="images/cancel.png" alt="Delete"></a> </span>';
+        $sum = $sum+$dt['18_amount'];
     }else{
-       $data[$i][$j++] ='';
-       $sum = $sum+$dt['18_amount'];
+        $data[$i][$j++] ='';
+        $sum = $sum+$dt['18_amount'];
 
-   }
-     if($dt['19_amount'] != 0){
-         $data[$i][$j++] = $dt['19_amount'].'<a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',19);">EDIT</a>';;
-         $sum = $sum+$dt['19_amount'];
+    }
+    if($dt['19_amount'] != 0){
+        $data[$i][$j++] = $dt['19_amount'].'<span> <a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',19);"><img src="images/pen.png" alt="Edit"></a> </span>
+         &nbsp&nbsp<span>  <a class="btn-xs button-Primary" onclick="deleteEntry('.$typeNo.','.$id.',19,'.$year.','.$month.');"><img src="images/cancel.png" alt="Delete"></a> </span>';
+        $sum = $sum+$dt['19_amount'];
     }else{
-         $data[$i][$j++] ='';
-         $sum = $sum+$dt['19_amount'];
+        $data[$i][$j++] ='';
+        $sum = $sum+$dt['19_amount'];
 
-     }
+    }
     if($dt['20_amount'] != 0){
-        $data[$i][$j++] = $dt['20_amount'].'<a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',20);">EDIT</a>';;
+        $data[$i][$j++] = $dt['20_amount'].'<span> <a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',20);"><img src="images/pen.png" alt="Edit"></a> </span>
+         &nbsp&nbsp<span>  <a class="btn-xs button-Primary" onclick="deleteEntry('.$typeNo.','.$id.',20,'.$year.','.$month.');"><img src="images/cancel.png" alt="Delete"></a> </span>';
         $sum = $sum+$dt['20_amount'];
     }else{
         $data[$i][$j++] ='';
@@ -226,23 +250,26 @@ while($dt = Sql_fetch_assoc($res)){
 
     }
     if($dt['21_amount'] != 0){
-        $data[$i][$j++] = $dt['21_amount'].'<a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',21);">EDIT</a>';;
+        $data[$i][$j++] = $dt['21_amount'].'<span> <a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',21);"><img src="images/pen.png" alt="Edit"></a> </span>
+         &nbsp&nbsp<span>  <a class="btn-xs button-Primary" onclick="deleteEntry('.$typeNo.','.$id.',21,'.$year.','.$month.');"><img src="images/cancel.png" alt="Delete"></a> </span>';
         $sum = $sum+$dt['21_amount'];
     }else{
         $data[$i][$j++] ='';
         $sum = $sum+$dt['21_amount'];
 
     }
-     if($dt['22_amount'] != 0){
-         $data[$i][$j++] = $dt['22_amount'].'<a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',22);">EDIT</a>';;
-         $sum = $sum+$dt['22_amount'];
+    if($dt['22_amount'] != 0){
+        $data[$i][$j++] = $dt['22_amount'].'<span> <a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',22);"><img src="images/pen.png" alt="Edit"></a> </span>
+         &nbsp&nbsp<span>  <a class="btn-xs button-Primary" onclick="deleteEntry('.$typeNo.','.$id.',22,'.$year.','.$month.');"><img src="images/cancel.png" alt="Delete"></a> </span>';
+        $sum = $sum+$dt['22_amount'];
     }else{
-         $data[$i][$j++] ='';
-         $sum = $sum+$dt['22_amount'];
+        $data[$i][$j++] ='';
+        $sum = $sum+$dt['22_amount'];
 
-     }
+    }
     if($dt['23_amount'] != 0){
-        $data[$i][$j++] = $dt['23_amount'].'<a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',23);">EDIT</a>';;
+        $data[$i][$j++] = $dt['23_amount'].'<span> <a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',23);"><img src="images/pen.png" alt="Edit"></a> </span>
+         &nbsp&nbsp<span>  <a class="btn-xs button-Primary" onclick="deleteEntry('.$typeNo.','.$id.',23,'.$year.','.$month.');"><img src="images/cancel.png" alt="Delete"></a> </span>';
         $sum = $sum+$dt['23_amount'];
     }else{
         $data[$i][$j++] ='';
@@ -250,7 +277,8 @@ while($dt = Sql_fetch_assoc($res)){
 
     }
     if($dt['24_amount'] != 0){
-        $data[$i][$j++] = $dt['24_amount'].'<a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',24);">EDIT</a>';;
+        $data[$i][$j++] = $dt['24_amount'].'<span> <a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',24);"><img src="images/pen.png" alt="Edit"></a> </span>
+         &nbsp&nbsp<span>  <a class="btn-xs button-Primary" onclick="deleteEntry('.$typeNo.','.$id.',24,'.$year.','.$month.');"><img src="images/cancel.png" alt="Delete"></a> </span>';
         $sum = $sum+$dt['24_amount'];
     }else{
         $data[$i][$j++] ='';
@@ -258,7 +286,8 @@ while($dt = Sql_fetch_assoc($res)){
 
     }
     if($dt['25_amount'] != 0){
-        $data[$i][$j++] = $dt['25_amount'].'<a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',25);">EDIT</a>';;
+        $data[$i][$j++] = $dt['25_amount'].'<span> <a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',25);"><img src="images/pen.png" alt="Edit"></a> </span>
+         &nbsp&nbsp<span>  <a class="btn-xs button-Primary" onclick="deleteEntry('.$typeNo.','.$id.',25,'.$year.','.$month.');"><img src="images/cancel.png" alt="Delete"></a> </span>';
         $sum = $sum+$dt['25_amount'];
     }else{
         $data[$i][$j++] ='';
@@ -266,7 +295,8 @@ while($dt = Sql_fetch_assoc($res)){
 
     }
     if($dt['26_amount'] != 0){
-        $data[$i][$j++] = $dt['26_amount'].'<a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',26);">EDIT</a>';;
+        $data[$i][$j++] = $dt['26_amount'].'<span> <a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',26);"><img src="images/pen.png" alt="Edit"></a> </span>
+         &nbsp&nbsp<span>  <a class="btn-xs button-Primary" onclick="deleteEntry('.$typeNo.','.$id.',26,'.$year.','.$month.');"><img src="images/cancel.png" alt="Delete"></a> </span>';
         $sum = $sum+$dt['26_amount'];
     }else{
         $data[$i][$j++] ='';
@@ -274,7 +304,8 @@ while($dt = Sql_fetch_assoc($res)){
 
     }
     if($dt['27_amount'] != 0){
-        $data[$i][$j++] = $dt['27_amount'].'<a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',27);">EDIT</a>';;
+        $data[$i][$j++] = $dt['27_amount'].'<span> <a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',27);"><img src="images/pen.png" alt="Edit"></a> </span>
+         &nbsp&nbsp<span>  <a class="btn-xs button-Primary" onclick="deleteEntry('.$typeNo.','.$id.',27,'.$year.','.$month.');"><img src="images/cancel.png" alt="Delete"></a> </span>';
         $sum = $sum+$dt['27_amount'];
     }else{
         $data[$i][$j++] ='';
@@ -282,7 +313,8 @@ while($dt = Sql_fetch_assoc($res)){
 
     }
     if($dt['28_amount'] != 0){
-        $data[$i][$j++] = $dt['28_amount'].'<a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',28);">EDIT</a>';;
+        $data[$i][$j++] = $dt['28_amount'].'<span> <a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',28);"><img src="images/pen.png" alt="Edit"></a> </span>
+         &nbsp&nbsp<span>  <a class="btn-xs button-Primary" onclick="deleteEntry('.$typeNo.','.$id.',28,'.$year.','.$month.');"><img src="images/cancel.png" alt="Delete"></a> </span>';
         $sum = $sum+$dt['28_amount'];
     }else{
         $data[$i][$j++] ='';
@@ -290,30 +322,33 @@ while($dt = Sql_fetch_assoc($res)){
 
     }
     if($dt['29_amount'] != 0){
-        $data[$i][$j++] = $dt['29_amount'].'<a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',29);">EDIT</a>';;
+        $data[$i][$j++] = $dt['29_amount'].'<span> <a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',29);"><img src="images/pen.png" alt="Edit"></a> </span>
+         &nbsp&nbsp<span>  <a class="btn-xs button-Primary" onclick="deleteEntry('.$typeNo.','.$id.',29,'.$year.','.$month.');"><img src="images/cancel.png" alt="Delete"></a> </span>';
         $sum = $sum+$dt['29_amount'];
     }else{
         $data[$i][$j++] ='';
         $sum = $sum+$dt['29_amount'];
 
     }
-     if($dt['30_amount'] != 0){
-         $data[$i][$j++] = $dt['30_amount'].'<a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',30);">EDIT</a>';;
-         $sum = $sum+$dt['30_amount'];
+    if($dt['30_amount'] != 0){
+        $data[$i][$j++] = $dt['30_amount'].'<span> <a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',30);"><img src="images/pen.png" alt="Edit"></a> </span>
+         &nbsp&nbsp<span>  <a class="btn-xs button-Primary" onclick="deleteEntry('.$typeNo.','.$id.',30,'.$year.','.$month.');"><img src="images/cancel.png" alt="Delete"></a> </span>';
+        $sum = $sum+$dt['30_amount'];
     }else{
-         $data[$i][$j++] ='';
-         $sum = $sum+$dt['30_amount'];
+        $data[$i][$j++] ='';
+        $sum = $sum+$dt['30_amount'];
 
-     }
+    }
 
     if($dt['31_amount'] != 0){
-        $data[$i][$j++] = $dt['31_amount'].'<a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',31);">EDIT</a>';;
+        $data[$i][$j++] = $dt['31_amount'].'<span> <a class="btn-xs button-Primary" onclick="changeEntry('.$typeNo.','.$id.',31);"><img src="images/pen.png" alt="Edit"></a> </span>
+         &nbsp&nbsp<span>  <a class="btn-xs button-Primary" onclick="deleteEntry('.$typeNo.','.$id.',31,'.$year.','.$month.');"><img src="images/cancel.png" alt="Delete"></a> </span>';
         $sum = $sum+$dt['31_amount'];
     }else{
         $data[$i][$j++] ='';
         $sum = $sum+$dt['31_amount'];
     }
-   // $data[$i][$j++] = $sum;
+    // $data[$i][$j++] = $sum;
     if($dt['Total_Balance'] != 0) {
         $data[$i][$j++] = $dt['Total_Balance'];
         $totalsum=$totalsum+(int)$dt['Total_Balance'];
@@ -323,11 +358,290 @@ while($dt = Sql_fetch_assoc($res)){
 
     $i++;
 }
+    else{ // general user
 
-   for($l=0;$l<($currentMonth+1);$l++){
+        if($type=='payment'){
+            $id = $dt['Payment_ID'];$typeNo = 1;
+            $data[$i][$j++] = $dt['Payment_Name'];
+
+        }else{
+            $id = $dt['Receipt_ID'];$typeNo = 2;
+            $data[$i][$j++] = $dt['Receipt_Name'];
+
+        }
+
+        if($dt['1_amount'] != 0){
+            $data[$i][$j++] = $dt['1_amount'];
+            $sum = $sum+$dt['1_amount'];
+        }else{
+
+            $data[$i][$j++] ='';
+            $sum = $sum+$dt['1_amount'];
+        }
+        if($dt['2_amount'] != 0){
+            $data[$i][$j++] = $dt['2_amount'];
+            $sum = $sum+$dt['2_amount'];
+        }else{
+            $data[$i][$j++] ='';
+            $sum = $sum+$dt['2_amount'];
+
+        }
+        if($dt['3_amount'] != 0){
+            $data[$i][$j++] = $dt['3_amount'];
+            $sum = $sum+$dt['3_amount'];
+        }else{
+            $data[$i][$j++] ='';
+            $sum = $sum+$dt['3_amount'];
+
+        }
+        if($dt['4_amount'] != 0){
+            $data[$i][$j++] = $dt['4_amount'];
+            $sum = $sum+$dt['4_amount'];
+        }else{
+            $data[$i][$j++] ='';
+            $sum = $sum+$dt['4_amount'];
+
+        }
+        if($dt['5_amount'] != 0){
+            $data[$i][$j++] = $dt['5_amount'];
+            $sum = $sum+$dt['5_amount'];
+        }else{
+            $data[$i][$j++] ='';
+            $sum = $sum+$dt['5_amount'];
+
+        }
+        if($dt['6_amount'] != 0){
+            $data[$i][$j++] = $dt['6_amount'];
+            $sum = $sum+$dt['6_amount'];
+        }else{
+            $data[$i][$j++] ='';
+            $sum = $sum+$dt['6_amount'];
+
+        }
+        if($dt['7_amount'] != 0){
+            $data[$i][$j++] = $dt['7_amount'];
+            $sum = $sum+$dt['7_amount'];
+        }else{
+            $data[$i][$j++] ='';
+            $sum = $sum+$dt['7_amount'];
+
+        }
+        if($dt['8_amount'] != 0){
+            $data[$i][$j++] = $dt['8_amount'];
+            $sum = $sum+$dt['8_amount'];
+        }else{
+            $data[$i][$j++] ='';
+            $sum = $sum+$dt['8_amount'];
+
+        }
+        if($dt['9_amount'] != 0){
+            $data[$i][$j++] = $dt['9_amount'];
+            $sum = $sum+$dt['9_amount'];
+        }else{
+            $data[$i][$j++] ='';
+            $sum = $sum+$dt['9_amount'];
+
+        }
+        if($dt['10_amount'] != 0){
+            $data[$i][$j++] = $dt['10_amount'];
+            $sum = $sum+$dt['10_amount'];
+        }else{
+            $data[$i][$j++] ='';
+            $sum = $sum+$dt['10_amount'];
+
+        }
+        if($dt['11_amount'] != 0){
+            $data[$i][$j++] = $dt['11_amount'];
+            $sum = $sum+$dt['11_amount'];
+        }else{
+            $data[$i][$j++] ='';
+            $sum = $sum+$dt['11_amount'];
+
+        }
+        if($dt['12_amount'] != 0){
+            $data[$i][$j++] = $dt['12_amount'];
+            $sum = $sum+$dt['12_amount'];
+        }else{
+            $data[$i][$j++] ='';
+            $sum = $sum+$dt['12_amount'];
+
+        }
+        if($dt['13_amount'] != 0){
+            $data[$i][$j++] = $dt['13_amount'];
+            $sum = $sum+$dt['13_amount'];
+        }else{
+            $data[$i][$j++] ='';
+            $sum = $sum+$dt['13_amount'];
+
+        }
+        if($dt['14_amount'] != 0){
+            $data[$i][$j++] = $dt['14_amount'];
+            $sum = $sum+$dt['14_amount'];
+        }else{
+            $data[$i][$j++] ='';
+            $sum = $sum+$dt['14_amount'];
+
+        }
+        if($dt['15_amount'] != 0){
+            $data[$i][$j++] = $dt['15_amount'];
+            $sum = $sum+$dt['15_amount'];
+        }else{
+            $data[$i][$j++] ='';
+            $sum = $sum+$dt['15_amount'];
+
+        }
+        if($dt['16_amount'] != 0){
+            $data[$i][$j++] = $dt['16_amount'];
+            $sum = $sum+$dt['16_amount'];
+        }else{
+            $data[$i][$j++] ='';
+            $sum = $sum+$dt['16_amount'];
+
+        }
+        if($dt['17_amount'] != 0){
+            $data[$i][$j++] = $dt['17_amount'];
+            $sum = $sum+$dt['17_amount'];
+        }else{
+            $data[$i][$j++] ='';
+            $sum = $sum+$dt['17_amount'];
+
+        }
+        if($dt['18_amount'] != 0){
+            $data[$i][$j++] = $dt['18_amount'];
+            $sum = $sum+$dt['18_amount'];
+        }else{
+            $data[$i][$j++] ='';
+            $sum = $sum+$dt['18_amount'];
+
+        }
+        if($dt['19_amount'] != 0){
+            $data[$i][$j++] = $dt['19_amount'];
+            $sum = $sum+$dt['19_amount'];
+        }else{
+            $data[$i][$j++] ='';
+            $sum = $sum+$dt['19_amount'];
+
+        }
+        if($dt['20_amount'] != 0){
+            $data[$i][$j++] = $dt['20_amount'];
+            $sum = $sum+$dt['20_amount'];
+        }else{
+            $data[$i][$j++] ='';
+            $sum = $sum+$dt['20_amount'];
+
+        }
+        if($dt['21_amount'] != 0){
+            $data[$i][$j++] = $dt['21_amount'];
+            $sum = $sum+$dt['21_amount'];
+        }else{
+            $data[$i][$j++] ='';
+            $sum = $sum+$dt['21_amount'];
+
+        }
+        if($dt['22_amount'] != 0){
+            $data[$i][$j++] = $dt['22_amount'];
+            $sum = $sum+$dt['22_amount'];
+        }else{
+            $data[$i][$j++] ='';
+            $sum = $sum+$dt['22_amount'];
+
+        }
+        if($dt['23_amount'] != 0){
+            $data[$i][$j++] = $dt['23_amount'];
+            $sum = $sum+$dt['23_amount'];
+        }else{
+            $data[$i][$j++] ='';
+            $sum = $sum+$dt['23_amount'];
+
+        }
+        if($dt['24_amount'] != 0){
+            $data[$i][$j++] = $dt['24_amount'];
+            $sum = $sum+$dt['24_amount'];
+        }else{
+            $data[$i][$j++] ='';
+            $sum = $sum+$dt['24_amount'];
+
+        }
+        if($dt['25_amount'] != 0){
+            $data[$i][$j++] = $dt['25_amount'];
+            $sum = $sum+$dt['25_amount'];
+        }else{
+            $data[$i][$j++] ='';
+            $sum = $sum+$dt['25_amount'];
+
+        }
+        if($dt['26_amount'] != 0){
+            $data[$i][$j++] = $dt['26_amount'];
+            $sum = $sum+$dt['26_amount'];
+        }else{
+            $data[$i][$j++] ='';
+            $sum = $sum+$dt['26_amount'];
+
+        }
+        if($dt['27_amount'] != 0){
+            $data[$i][$j++] = $dt['27_amount'];
+            $sum = $sum+$dt['27_amount'];
+        }else{
+            $data[$i][$j++] ='';
+            $sum = $sum+$dt['27_amount'];
+
+        }
+        if($dt['28_amount'] != 0){
+            $data[$i][$j++] = $dt['28_amount'];
+            $sum = $sum+$dt['28_amount'];
+        }else{
+            $data[$i][$j++] ='';
+            $sum = $sum+$dt['28_amount'];
+
+        }
+        if($dt['29_amount'] != 0){
+            $data[$i][$j++] = $dt['29_amount'];
+            $sum = $sum+$dt['29_amount'];
+        }else{
+            $data[$i][$j++] ='';
+            $sum = $sum+$dt['29_amount'];
+
+        }
+        if($dt['30_amount'] != 0){
+            $data[$i][$j++] = $dt['30_amount'];
+            $sum = $sum+$dt['30_amount'];
+        }else{
+            $data[$i][$j++] ='';
+            $sum = $sum+$dt['30_amount'];
+
+        }
+
+        if($dt['31_amount'] != 0){
+            $data[$i][$j++] = $dt['31_amount'];
+            $sum = $sum+$dt['31_amount'];
+        }else{
+            $data[$i][$j++] ='';
+            $sum = $sum+$dt['31_amount'];
+        }
+        // $data[$i][$j++] = $sum;
+        if($dt['Total_Balance'] != 0) {
+            $data[$i][$j++] = $dt['Total_Balance'];
+            $totalsum=$totalsum+(int)$dt['Total_Balance'];
+        }
+        else
+            $data[$i][$j++] = '0';
+
+        $i++;
+    }
+
+}
+    if($type=='payment'){
+        $data[$i][0] = '<b>Total Balances:(Payment)</b>';
+    }
+    else if($type=='receipt'){
+        $data[$i][0] = '<b>Total Balances:(Receipt)</b>';
+    }
+
+   for($l=1;$l<($currentMonth+1);$l++){
         $data[$i][$l] = '--';
     }
-    $data[$i][$l++] = $totalsum;
+    $data[$i][$l++] = '<b>'.$totalsum.'</b>';
+    //echo $currentMonth;
     //print_r($data);
     echo json_encode(array("data" => $data));
 }
@@ -428,7 +742,7 @@ else{
         $i++;$k++;
         $data2[$i][0]= $k;
         $data2[$i][1]='<b>Closing Balance</b>';
-        $data2[$i][2]='<b>'.$sumReceipt-$sumPayment.'</b>';
+        $data2[$i][2]='<b>'.($sumReceipt-$sumPayment).'</b>';
         $data2[$i][3]='--';
         $data2[$i][4]='--';
     }

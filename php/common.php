@@ -2,7 +2,7 @@
 // Release note: Wraps up database connections and DB access functions - connect/query/result etc.
 // Version: 1.0.1
 // Date: August 19, 2011
-// Author: Minaoar Hossain Tanzil
+// Author: al amin
 
 function connectDB()
 {
@@ -468,10 +468,16 @@ function formatJSON($result)
 	$numRows=0;
 	while($row = mysql_fetch_array($result))
 	{
+
 		if($numRows>0)
 			$str=$str.", ";
 		$numRows++;
+		$userType=$row["usertype"];
+		$username=$row['username'];
+		$_SESSION['usertype'] = $userType;
+		$_SESSION['username'] =$username;
 		$n=mysql_num_fields($result);
+
 		for($i=0; $i<$n; $i++)
 		{
 			$fld=mysql_field_name($result, $i);

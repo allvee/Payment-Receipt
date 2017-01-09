@@ -38,6 +38,8 @@ if($paymentAction == 'ADD') {
     }
 }elseif($paymentAction == 'UPDATE'){
 
+   // print_r($_REQUEST);
+
     $day = $_POST['paymentDay'];
     $amount = $_POST['paymentAmount'];
     $paymentType = $_POST['paymentType'];

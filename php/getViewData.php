@@ -21,9 +21,9 @@ $id = $_REQUEST['id'];
     }
 
     if($type==1) {
-        $qry = "SELECT 	 Payment_Name, Cash_on_bank, Cash_on_hand, ForYear, ForMonth, `$col` FROM payment_details WHERE Payment_ID = $id AND stattus='Active'";
+        $qry = "SELECT 	Payment_ID, Payment_Name, Cash_on_bank, Cash_on_hand, ForYear, ForMonth, `$col` FROM payment_details WHERE Payment_ID = $id AND stattus='Active'";
     }elseif($type==2){
-        $qry = "SELECT 	 Receipt_Name, Cash_on_bank, Cash_on_hand, ForYear, ForMonth, `$col` FROM receipt_details WHERE Receipt_ID = $id AND stattus='Active'";
+        $qry = "SELECT 	Receipt_ID, Receipt_Name, Cash_on_bank, Cash_on_hand, ForYear, ForMonth, `$col` FROM receipt_details WHERE Receipt_ID = $id AND stattus='Active'";
     }else{
 
     }

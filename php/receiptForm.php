@@ -40,6 +40,7 @@ if($receiptAction == 'ADD') {
         $isError = 1;
     }
 }elseif($receiptAction == 'UPDATE'){
+
     $day = $_POST['receiptDay'];
     $amount = $_POST['receiptAmount'];
     $receiptType = $_POST['receiptType'];
