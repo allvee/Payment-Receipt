@@ -31,7 +31,7 @@
                                 <li class="active btn" id="home" onclick="view('container','homeView',true);changeTab('home');"><a>Home</a></li>
                                 <li class="btn" id="receipt" onclick="view('container','receiptView',true); changeTab('receipt');"><a>Receipt</a></li>
                                 <li class="btn" id="payment" onclick="view('container','paymentView',true);changeTab('payment');"><a>payment</a></li>
-								<li  class="btn" onclick="logout();"> <a>Logout<span id="loguser">()</span></a></li>
+								<li  class="btn" onclick="logout();"> <a>Logout<span id="loguser"></span></a></li>
                             </ul>
                         </div>
                     </nav>
@@ -110,7 +110,7 @@
         <div class="col-lg-1" style=" font-weight: bold">Month</div>
         <div class="col-lg-3">
             <div class="form-group">
-                <select class="form-control" id="selectionMonth">
+                <select multiple="multiple" class="form-control" id="selectionMonth">
                     <option value="1">January</option>
                     <option value="2">February</option>
                     <option value="3">March</option>

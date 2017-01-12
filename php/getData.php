@@ -8,22 +8,25 @@
 
 include_once "config.php";
 $isError = 0;
-
+session_start();
 $year = $_REQUEST['year'];
-$month = $_REQUEST['month'];
+$monthlist= $_REQUEST['month'];
+$month=implode(',',$monthlist);
+
 $type = $_REQUEST['type'];
 $usertype=$_SESSION['usertype'];
+//$usertype='Admin';
 $day31=array("1","3","5","7","8","10","12");
 $day30=array("4","6","9","11");
-
+//print_r($month);
 
 if($type=='payment') {
-    $qry = "SELECT * FROM payment_details WHERE ForYear = '$year' AND ForMonth = '$month' AND stattus='Active'";
+    $qry = "SELECT * FROM payment_details WHERE ForYear = '$year' AND ForMonth in ($month) AND stattus='Active'";
 }elseif($type=='receipt'){
-    $qry= "SELECT * FROM receipt_details WHERE ForYear = '$year' AND ForMonth = '$month' AND stattus='Active'";
+    $qry= "SELECT * FROM receipt_details WHERE ForYear = '$year' AND ForMonth in ($month) AND stattus='Active'";
 }else{
-    $Receipt_qry = "SELECT Receipt_Name, Total_Balance FROM receipt_details WHERE ForYear = '$year' AND ForMonth = '$month' AND stattus='Active'";
-    $payment_qry = "SELECT Payment_Name, Total_Balance FROM payment_details WHERE ForYear = '$year' AND ForMonth = '$month' AND stattus='Active'";
+    $Receipt_qry = "SELECT Receipt_Name, Total_Balance FROM receipt_details WHERE ForYear = '$year' AND ForMonth in ($month) AND stattus='Active'";
+    $payment_qry = "SELECT Payment_Name, Total_Balance FROM payment_details WHERE ForYear = '$year' AND ForMonth in ($month) AND stattus='Active'";
 }
 
 function leapYear($year)
@@ -643,6 +646,7 @@ if($usertype=='Admin'){
     $data[$i][$l++] = '<b>'.$totalsum.'</b>';
     //echo $currentMonth;
     //print_r($data);
+   // print_r($_SESSION);
     echo json_encode(array("data" => $data));
 }
 else{

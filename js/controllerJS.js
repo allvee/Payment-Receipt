@@ -25,7 +25,7 @@ function loginController() {
                     var login_info = JSON.parse(data.response);
                     if (auth_status != null) {
                         console.log(login_info);
-                        alert(login_info[0].name);
+                        //alert(login_info[0].name);
                         $("#loguser").text(login_info[0].name);
                        // document.getElementById("loguser").textContent=login_info[0].name;
                         location.reload();
@@ -159,22 +159,38 @@ function getData(){
 
     $("#tableRow").empty().html('<table class="table table-bordered" style=" overflow:scroll;height:100px;" width="100%" id="dataTable"> </table>');
     var monthName = ['January',"February","March","April","May","Jun","July","August","September","October","November","December"];
- var year = $("#selectionYear").val();
- var month = $("#selectionMonth").val();
+    var year = $("#selectionYear").val();
+    var month = $("#selectionMonth").val();
+    var month_string=$("#selectionMonth").val();
+
+    if(!month_string){
+        warningmsg('Please Select exactly a Month.')
+        return;
+    }
 
     if($("#paymentViewdt").is(':checked')){
-     var   type = 'payment';
+        var   type = 'payment';
+        if (month_string.length>1)
+        {
+            warningmsg('Please Select Single Month only.')
+            return;
+        }
     }else if($("#receiptViewdt").is(':checked')){
-     var   type = 'receipt';
+        var   type = 'receipt';
+        if (month_string.length>1)
+        {
+            warningmsg('Please Select Single Month only.')
+            return;
+        }
     }else if($("#allViewdt").is(':checked')){
-      var  type = 'all';
+        var  type = 'all';
     }else{
 
         alertmsg('Please Select A Type Payment/Receipt');
     }
     var tableData = [];
 
-     tableData = generateColumn(year,month,type);
+    tableData = generateColumn(year,month,type);
 
     if(type != null) {
         if(type == 'payment'){
@@ -182,7 +198,17 @@ function getData(){
         }else if(type == 'receipt'){
             $("#tableTitle").html('RECEIPT TABLE FOR MONTH '+monthName[month-1]+' '+year);
         }else{
-            $("#tableTitle").html('JOURNAL FOR MONTH '+monthName[month-1]+' '+year);
+            var ss='';
+            //console.log(monthName);
+            for(i=0; i<month_string.length; i++)
+            {
+               if(i>0)
+                    ss=ss+', '+ monthName[month_string[i]];
+                else
+                    ss=ss+ monthName[month_string[i]];
+            }
+
+            $("#tableTitle").html('JOURNAL FOR MONTH '+ss+' '+year);
         }
        var dataInfo = {
             'year': year,
