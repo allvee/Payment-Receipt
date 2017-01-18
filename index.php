@@ -14,9 +14,23 @@
     <link rel="stylesheet" href="popup/css/jquery.modal.css">
     <link rel="stylesheet" href="popup/css/jquery.modal.theme-atlant.css">
     <link rel="stylesheet" href="popup/css/jquery.modal.theme-xenon.css">
+
+    <link rel="stylesheet" href="css/bootstrap-3.3.2.min.css" type="text/css">
+    <script type="text/javascript" src="js/jquery-2.1.3.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-3.3.2.min.js"></script>
+    <link rel="stylesheet" href="css/bootstrap-multiselect.css" type="text/css">
+    <script type="text/javascript" src="js/bootstrap-multiselect.js"></script>
 </head>
 
 <body>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#test').multiselect({
+            includeSelectAllOption: true,
+            allSelectedText: 'Selected all'
+        });
+    });
+</script>
 <div class="container">
     <div id="header" style="display: none">
         <div class="container-fluid">
@@ -109,7 +123,7 @@
 
         <div class="col-lg-1" style=" font-weight: bold">Month</div>
         <div class="col-lg-3">
-            <div class="form-group">
+            <div >
                 <select multiple="multiple" class="form-control" id="selectionMonth">
                     <option value="1">January</option>
                     <option value="2">February</option>
