@@ -164,26 +164,46 @@ function getData(){
     var month_string=$("#selectionMonth").val();
 
     if(!month_string){
-        warningmsg('Please Select exactly a Month.')
+        warningmsg('Please Select Month.')
+
         return;
     }
 
     if($("#paymentViewdt").is(':checked')){
         var   type = 'payment';
-        if (month_string.length>1)
+        if (month_string.length>1 )
         {
             warningmsg('Please Select Single Month only.')
+            $("#tableTitle").html('Please Select Single Month only.');
+            return;
+        }
+        else if(month_string[0]==0){
+
+            month_string=[0,1,2,3,4,5,6,7,8,9,10,11];
+            warningmsg('Please Select Single Month only.')
+            $("#tableTitle").html('Please Select Single Month only.');
             return;
         }
     }else if($("#receiptViewdt").is(':checked')){
         var   type = 'receipt';
-        if (month_string.length>1)
+        if (month_string.length>1 )
         {
+            warningmsg('Please Select Single Month only.')
+            $("#tableTitle").html('Please Select Single Month only.');
+            return;
+        }
+        else if(month_string[0]==0){
+
+            month_string=[0,1,2,3,4,5,6,7,8,9,10,11];
             warningmsg('Please Select Single Month only.')
             return;
         }
     }else if($("#allViewdt").is(':checked')){
         var  type = 'all';
+        if(month_string[0]==0){
+            month_string=[0,1,2,3,4,5,6,7,8,9,10,11];
+        }
+
     }else{
 
         alertmsg('Please Select A Type Payment/Receipt');
@@ -197,7 +217,7 @@ function getData(){
             $("#tableTitle").html('PAYMENT TABLE FOR MONTH '+monthName[month-1]+' '+year);
         }else if(type == 'receipt'){
             $("#tableTitle").html('RECEIPT TABLE FOR MONTH '+monthName[month-1]+' '+year);
-        }else{
+        }else if(type == 'all'){
             var ss='';
             //console.log(monthName);
             for(i=0; i<month_string.length; i++)
@@ -221,7 +241,7 @@ function getData(){
             "draw":true,
             scrollX: true,
             scrollCollapse: true,
-            "lengthMenu": [[10, 25, 50, 100, 150, 200], [10, 25, 50, 100, 150, 200]],
+            "lengthMenu": [[10,25, 50, 100, 150, 200], [10, 25, 50, 100, 150, 200]],
             "searching": true,
             "bFilter": true,
             "columns": tableData[1],

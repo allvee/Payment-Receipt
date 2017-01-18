@@ -11,7 +11,11 @@ $isError = 0;
 session_start();
 $year = $_REQUEST['year'];
 $monthlist= $_REQUEST['month'];
-$month=implode(',',$monthlist);
+if($monthlist[0]==0){
+    $month='1,2,3,4,5,6,7,8,9,10,11,12';
+}
+else
+ $month=implode(',',$monthlist);
 
 $type = $_REQUEST['type'];
 $usertype=$_SESSION['usertype'];
