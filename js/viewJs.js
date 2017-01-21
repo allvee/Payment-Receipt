@@ -9,6 +9,11 @@ $(document).ready(function(){
     }else{
         $("#header").show();
         view('container','homeView',true);
+
+            $('#selectionMonth').multiselect({
+                includeSelectAllOption: true,
+                allSelectedText: 'All Selected '
+            });
     }
 });
 

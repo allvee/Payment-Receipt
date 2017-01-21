@@ -8,6 +8,11 @@
     <title>Receipt & payment status</title>
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport'/>
     <meta name="viewport" content="width=device-width"/>
+    <link rel="stylesheet" href="css/bootstrap-3.3.2.min.css" type="text/css">
+
+
+    <link rel="stylesheet" href="css/bootstrap-multiselect.css" type="text/css">
+
     <link rel="stylesheet" href="css/cdnbootstrap.min.css">
     <link rel="stylesheet" href="css/datatable.css">
 
@@ -15,21 +20,11 @@
     <link rel="stylesheet" href="popup/css/jquery.modal.theme-atlant.css">
     <link rel="stylesheet" href="popup/css/jquery.modal.theme-xenon.css">
 
-    <link rel="stylesheet" href="css/bootstrap-3.3.2.min.css" type="text/css">
-    <script type="text/javascript" src="js/jquery-2.1.3.min.js"></script>
-    <script type="text/javascript" src="js/bootstrap-3.3.2.min.js"></script>
-    <link rel="stylesheet" href="css/bootstrap-multiselect.css" type="text/css">
-    <script type="text/javascript" src="js/bootstrap-multiselect.js"></script>
 </head>
 
 <body>
 <script type="text/javascript">
-    $(document).ready(function() {
-        $('#test').multiselect({
-            includeSelectAllOption: true,
-            allSelectedText: 'Selected all'
-        });
-    });
+
 </script>
 <div class="container">
     <div id="header" style="display: none">
@@ -580,10 +575,16 @@
 <script type="text/javascript" src="js/commonJS.js"></script>
 <script type="text/javascript" src="js/controllerJS.js"></script>
 
+
+
 <!-- for Popup -->
 <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript" src="popup/js/jquery.modal.min.js"></script>
 <script type="text/javascript" src="popup/js/jquery.modal.js"></script>
+
+<script type="text/javascript" src="js/bootstrap-multiselect.js"></script>
+<!--<script type="text/javascript" src="js/jquery-2.1.3.min.js"></script>-->
+<script type="text/javascript" src="js/bootstrap-3.3.2.min.js"></script>
 
 <script type="text/javascript" src="js/cdndatatables.js"></script>
 

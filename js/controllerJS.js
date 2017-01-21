@@ -1,5 +1,5 @@
 /**
- * Created by Anik-pc on 12/25/2016.
+ * Created by Al Amin on 12/25/2016.
  */
 
 service_url['login'] = service_host+'login.php';
@@ -17,27 +17,24 @@ service_url['deleteReceiptName'] = service_host+'deleteReceiptName.php';
 
 function loginController() {
 
-        postFormData('loginForm', service_url['login'], function (data) {
-            if (data.readyState == 4) {
-                if (data.response != false) {
-                    sessionStorage.setItem( 'is_auth', data);
-                    var auth_status = sessionStorage.getItem('is_auth');
-                    var login_info = JSON.parse(data.response);
-                    if (auth_status != null) {
-                        console.log(login_info);
-                        //alert(login_info[0].name);
-                        $("#loguser").text(login_info[0].name);
-                       // document.getElementById("loguser").textContent=login_info[0].name;
-                        location.reload();
-                        view('loguser', login_info[0].name);
-                    } else {
-                        view('login_holder', 'login_directory');
-                    }
+    postFormData('loginForm', service_url['login'], function (data) {
+        if (data.readyState == 4) {
+            if (data.response != false) {
+                sessionStorage.setItem( 'is_auth', data);
+                var auth_status = sessionStorage.getItem('is_auth');
+                var login_info = JSON.parse(data.response);
+                if (auth_status != null) {
+                    $("#loguser").text(login_info[0].name);
+                    location.reload();
+                    view('loguser', login_info[0].name);
                 } else {
-                    warningmsg('Username and password does not matched.');
+                    view('login_holder', 'login_directory');
                 }
+            } else {
+                warningmsg('Username and password does not matched.');
             }
-        });
+        }
+    });
 
 }
 
@@ -47,24 +44,7 @@ function logout(){
 }
 
 function saveReceipt(){
-/*    var receiptName, receiptAmount;
-    receiptName = $("#receiptName").val();
-    receiptAmount=$("#receiptAmount").val();
-    if(receiptName=='')
-    {
-        warningmsg('Please Enter Receipt Name');
-        return;
-    }
-    else if(receiptAmount=='')
-    {
-        warningmsg('Please Enter Amount of Money in BDT.');
-        return;
-    }*/
-
-   /* if($("#receiptID").val()=="NA" && $("#receiptAction").val()=='UPDATE'){
-        $("#receiptID").val($("#receiptNameselect").val());
-    }*/
-   var response = postFormData('receiptFormUser', service_url['receiptForm'], function (data) {
+    var response = postFormData('receiptFormUser', service_url['receiptForm'], function (data) {
         if (data.readyState == 4) {
             if(data.response == '+OK'){
                 Successmsg('Save Receipt Entry Successful.');
@@ -102,22 +82,6 @@ function updateReceipt(){
 
 
 function savePayment(){
-   /* var paymentName, paymentAmount;
-    paymentName = $("#paymentName").val();
-    paymentAmount=$("#paymentAmount").val();
-    if(paymentName=='')
-    {
-        warningmsg('Please Enter Payment Name');
-        return;
-    }
-    else if(paymentAmount=='')
-    {
-        warningmsg('Please Enter Amount of Money in BDT.');
-        return;
-    }
-    if($("#paymentID").val()=="NA" && $("#paymentAction").val()=="UPDATE"){
-        $("#paymentID").val($("#paymentNameselect").val());
-    }*/
     postFormData('paymentFormUser', service_url['paymentForm'], function (data) {
         if (data.readyState == 4) {
             if(data.response == '+OK'){
@@ -135,7 +99,7 @@ function savePayment(){
 function updatePayment(){
 
 
-   var day= $("#paymentDay").val();
+    var day= $("#paymentDay").val();
     alert(day);
 
     if($("#paymentID").val()=='NA')
@@ -161,48 +125,31 @@ function getData(){
     var monthName = ['January',"February","March","April","May","Jun","July","August","September","October","November","December"];
     var year = $("#selectionYear").val();
     var month = $("#selectionMonth").val();
-    var month_string=$("#selectionMonth").val();
 
-    if(!month_string){
+    if(!month){
         warningmsg('Please Select Month.')
-
         return;
     }
 
     if($("#paymentViewdt").is(':checked')){
         var   type = 'payment';
-        if (month_string.length>1 )
+        if (month.length>1 )
         {
             warningmsg('Please Select Single Month only.')
-            $("#tableTitle").html('Please Select Single Month only.');
-            return;
-        }
-        else if(month_string[0]==0){
-
-            month_string=[0,1,2,3,4,5,6,7,8,9,10,11];
-            warningmsg('Please Select Single Month only.')
-            $("#tableTitle").html('Please Select Single Month only.');
+            $("#tableTitle").html('Please Select Single Month only for Payment.');
             return;
         }
     }else if($("#receiptViewdt").is(':checked')){
         var   type = 'receipt';
-        if (month_string.length>1 )
+        if (month.length>1 )
         {
             warningmsg('Please Select Single Month only.')
-            $("#tableTitle").html('Please Select Single Month only.');
+            $("#tableTitle").html('Please Select Single Month only for Receipt.');
             return;
         }
-        else if(month_string[0]==0){
 
-            month_string=[0,1,2,3,4,5,6,7,8,9,10,11];
-            warningmsg('Please Select Single Month only.')
-            return;
-        }
     }else if($("#allViewdt").is(':checked')){
         var  type = 'all';
-        if(month_string[0]==0){
-            month_string=[0,1,2,3,4,5,6,7,8,9,10,11];
-        }
 
     }else{
 
@@ -219,23 +166,25 @@ function getData(){
             $("#tableTitle").html('RECEIPT TABLE FOR MONTH '+monthName[month-1]+' '+year);
         }else if(type == 'all'){
             var ss='';
-            //console.log(monthName);
-            for(i=0; i<month_string.length; i++)
+            var Mlen=month.length;
+            for(i=0; i<Mlen; i++)
             {
-               if(i>0)
-                    ss=ss+', '+ monthName[month_string[i]];
+                if(i==0)
+                    ss=ss + monthName[month[i]-1];
+                else if(i==(Mlen-1))
+                    ss=ss + ' and '+monthName[month[i]-1];
                 else
-                    ss=ss+ monthName[month_string[i]];
+                    ss=ss + ', ' +monthName[month[i]-1];
             }
 
             $("#tableTitle").html('JOURNAL FOR MONTH '+ss+' '+year);
         }
-       var dataInfo = {
+        var dataInfo = {
             'year': year,
             'month': month,
             'type': type,
         };
-       $("#dataTable").DataTable({
+        $("#dataTable").DataTable({
             "destroy": true,
             "clear":true,
             "draw":true,
@@ -245,7 +194,7 @@ function getData(){
             "searching": true,
             "bFilter": true,
             "columns": tableData[1],
-            "order": [0,'asc'],
+            // "order": [0,'asc'],
             "columnDefs": [
                 {
                     "targets": tableData[0],
@@ -265,9 +214,9 @@ function getData(){
         });
 
     }else{
-		// all 
+        // all
 		
-	}
+    }
 
 }
 
@@ -297,67 +246,38 @@ function generateColumn(year,month,type) {
 
     }
     else {
-    if (jQuery.inArray(month, day31) !== -1) {
+        var month=month[0];
+        if (jQuery.inArray(month, day31) !== -1) {
 
-        for (var i = 0; i < 33; i++) {
-            dateCOl[i] = [];
-            if (i == 0) {
-                if (type == 'payment') {
-                    dateCOl[i] = ( {"title": 'Payment List', "data": i});
-                    dateTar[i] = i;
-                } else if (type == 'receipt') {
-                    dateCOl[i] = ({"title": 'Receipt List', "data": i});
-                    dateTar[i] = i;
+            for (var i = 0; i < 33; i++) {
+                dateCOl[i] = [];
+                if (i == 0) {
+                    if (type == 'payment') {
+                        dateCOl[i] = ( {"title": 'Payment List', "data": i});
+                        dateTar[i] = i;
+                    } else if (type == 'receipt') {
+                        dateCOl[i] = ({"title": 'Receipt List', "data": i});
+                        dateTar[i] = i;
 
+                    }
+                    else {
+                        dateCOl[i] = ({"title": 'Journal List', "data": i});
+                        dateTar[i] = i;
+                    }
+
+
+                } else if (i == 32) {
+                    dateCOl[i] = ({"title": 'Total', "data": i});
+                    dateTar[i] = i;
+                } else {
+                    dateCOl[i] = {"title": i + '-' + monthName[month - 1], "data": i};
+                    dateTar[i] = i;
                 }
-                else {
-                    dateCOl[i] = ({"title": 'Journal List', "data": i});
-                    dateTar[i] = i;
-                }
-
-
-            } else if (i == 32) {
-                dateCOl[i] = ({"title": 'Total', "data": i});
-                dateTar[i] = i;
-            } else {
-                dateCOl[i] = {"title": i + '-' + monthName[month - 1], "data": i};
-                dateTar[i] = i;
             }
-        }
 
-    } else if (jQuery.inArray(month, day30) !== -1) {
+        } else if (jQuery.inArray(month, day30) !== -1) {
 
-        for (var i = 0; i < 32; i++) {
-            dateCOl[i] = [];
-            if (i == 0) {
-                if (type == 'payment') {
-
-                    dateCOl[i] = ( {"title": 'Payment List', "data": i});
-                    dateTar[i] = i;
-                } else if (type == 'receipt') {
-                    dateCOl[i] = ({"title": 'Receipt List', "data": i});
-                    dateTar[i] = i;
-                }
-                else {
-                    dateCOl[i] = ({"title": 'Journal List', "data": i});
-                    dateTar[i] = i;
-                }
-
-
-            } else if (i == 31) {
-                dateCOl[i] = ({"title": 'Total', "data": i});
-                dateTar[i] = i;
-            } else {
-                dateCOl[i] = {"title": i + '-' + monthName[month - 1], "data": i};
-                dateTar[i] = i;
-            }
-        }
-
-    } else {
-        var bool = leapYear(year);
-        //alert(bool);
-        if (bool) {
-            for (var i = 0; i < 31; i++) {
+            for (var i = 0; i < 32; i++) {
                 dateCOl[i] = [];
                 if (i == 0) {
                     if (type == 'payment') {
@@ -374,7 +294,7 @@ function generateColumn(year,month,type) {
                     }
 
 
-                } else if (i == 30) {
+                } else if (i == 31) {
                     dateCOl[i] = ({"title": 'Total', "data": i});
                     dateTar[i] = i;
                 } else {
@@ -384,34 +304,64 @@ function generateColumn(year,month,type) {
             }
 
         } else {
-            for (var i = 0; i < 30; i++) {
-                dateCOl[i] = [];
-                if (i == 0) {
-                    if (type == 'payment') {
+            var bool = leapYear(year);
+            //alert(bool);
+            if (bool) {
+                for (var i = 0; i < 31; i++) {
+                    dateCOl[i] = [];
+                    if (i == 0) {
+                        if (type == 'payment') {
 
-                        dateCOl[i] = ( {"title": 'Payment List', "data": i});
+                            dateCOl[i] = ( {"title": 'Payment List', "data": i});
+                            dateTar[i] = i;
+                        } else if (type == 'receipt') {
+                            dateCOl[i] = ({"title": 'Receipt List', "data": i});
+                            dateTar[i] = i;
+                        }
+                        else {
+                            dateCOl[i] = ({"title": 'Journal List', "data": i});
+                            dateTar[i] = i;
+                        }
+
+
+                    } else if (i == 30) {
+                        dateCOl[i] = ({"title": 'Total', "data": i});
                         dateTar[i] = i;
-                    } else if (type == 'receipt') {
-                        dateCOl[i] = ({"title": 'Receipt List', "data": i});
+                    } else {
+                        dateCOl[i] = {"title": i + '-' + monthName[month - 1], "data": i};
                         dateTar[i] = i;
                     }
-                    else {
-                        dateCOl[i] = ({"title": 'Journal List', "data": i});
+                }
+
+            } else {
+                for (var i = 0; i < 30; i++) {
+                    dateCOl[i] = [];
+                    if (i == 0) {
+                        if (type == 'payment') {
+
+                            dateCOl[i] = ( {"title": 'Payment List', "data": i});
+                            dateTar[i] = i;
+                        } else if (type == 'receipt') {
+                            dateCOl[i] = ({"title": 'Receipt List', "data": i});
+                            dateTar[i] = i;
+                        }
+                        else {
+                            dateCOl[i] = ({"title": 'Journal List', "data": i});
+                            dateTar[i] = i;
+                        }
+
+
+                    } else if (i == 29) {
+                        dateCOl[i] = ({"title": 'Total', "data": i});
+                        dateTar[i] = i;
+                    } else {
+                        dateCOl[i] = {"title": i + '-' + monthName[month - 1], "data": i};
                         dateTar[i] = i;
                     }
-
-
-                } else if (i == 29) {
-                    dateCOl[i] = ({"title": 'Total', "data": i});
-                    dateTar[i] = i;
-                } else {
-                    dateCOl[i] = {"title": i + '-' + monthName[month - 1], "data": i};
-                    dateTar[i] = i;
                 }
             }
         }
     }
-}
     returnData[0] = dateTar;
     returnData[1] = dateCOl;
     return returnData;
@@ -419,15 +369,15 @@ function generateColumn(year,month,type) {
 }
 
 
-    function leapYear(year)
-    {
-        return ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0);
-    }
+function leapYear(year)
+{
+    return ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0);
+}
 
 function changeEntry(type,id,col){
 
     var dataIn = 'type='+type+'&id='+id+'&col='+col;
-   // alert(col);
+    // alert(col);
     if(type == 1){
 
         view('container','paymentView',true);changeTab('payment');
@@ -474,7 +424,7 @@ function changeEntry(type,id,col){
                 $("#receiptSelectionYear option[value='" + dataInfo[0][3] + "']").attr('selected', true);
                 $("#receiptSelectionMonth option[value='" + dataInfo[0][4]+ "']").attr('selected', true);
 
-               // $('#receiptNameselect').val(id);
+                // $('#receiptNameselect').val(id);
                 //$("#receiptDay").val(dataInfo[0][5]);
                 $("#receiptAmount").val(dataInfo[0][6]);
                 $("#receiptType").val();
